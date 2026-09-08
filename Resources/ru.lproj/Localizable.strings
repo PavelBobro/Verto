@@ -42,3 +42,7 @@
 "menu.copy"      = "Копировать";
 "menu.paste"     = "Вставить";
 "menu.selectAll" = "Выбрать все";
+
+/* Interface language */
+"settings.language"        = "Язык интерфейса";
+"settings.language.system" = "Как в системе";

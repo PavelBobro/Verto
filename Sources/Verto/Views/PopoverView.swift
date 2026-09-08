@@ -8,6 +8,9 @@ struct PopoverView: View {
     let onClose: () -> Void
     let onOpenSettings: () -> Void
 
+    // The popover is built once and lives for the whole session, so it has to watch
+    // settings to redraw when the interface language changes.
+    @ObservedObject private var settings = Settings.shared
     @StateObject private var model = PopoverModel()
     @FocusState private var inputFocused: Bool
 

@@ -19,6 +19,9 @@ final class SettingsWindow {
             self.window = window
         }
 
+        // The title is set on every show, not only on creation: the window outlives
+        // a language change.
+        window?.title = L.settingsTitle
         NSApp.activate(ignoringOtherApps: true)
         window?.makeKeyAndOrderFront(nil)
     }

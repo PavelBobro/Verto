@@ -49,6 +49,14 @@ struct SettingsView: View {
             } header: {
                 Text(L.behaviour)
             }
+
+            Section {
+                Picker(L.interfaceLanguage, selection: $settings.appLanguage) {
+                    ForEach(AppLanguage.allCases, id: \.self) { language in
+                        Text(language.title).tag(language)
+                    }
+                }
+            }
         }
         .formStyle(.grouped)
         .frame(width: 480)

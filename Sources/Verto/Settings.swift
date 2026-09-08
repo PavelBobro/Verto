@@ -28,6 +28,14 @@ final class Settings: ObservableObject {
         }
     }
 
+    @Published var appLanguage: AppLanguage {
+        didSet {
+            guard appLanguage != oldValue else { return }
+            UserDefaults.standard.set(appLanguage.rawValue, forKey: "appLanguage")
+            L.use(appLanguage)
+        }
+    }
+
     /// Surfaced in the settings window; login items can legitimately fail on an
     /// ad-hoc signed build, and silence would look like the toggle is broken.
     @Published var lastError: String?
@@ -37,6 +45,9 @@ final class Settings: ObservableObject {
     private init() {
         pair = Self.load(LanguagePair.self, as: .pair) ?? .default
         launchAtLogin = LoginItem.isEnabled
+        appLanguage = UserDefaults.standard.string(forKey: "appLanguage")
+            .flatMap(AppLanguage.init(rawValue:)) ?? .system
+        L.use(appLanguage)
     }
 
     private static func load<T: Decodable>(_ type: T.Type, as key: Key) -> T? {

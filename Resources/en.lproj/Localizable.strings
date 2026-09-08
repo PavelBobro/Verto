@@ -42,3 +42,7 @@
 "menu.copy"      = "Copy";
 "menu.paste"     = "Paste";
 "menu.selectAll" = "Select All";
+
+/* Interface language */
+"settings.language"        = "Interface language";
+"settings.language.system" = "Same as system";

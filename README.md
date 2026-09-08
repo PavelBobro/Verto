@@ -97,7 +97,9 @@ therefore cannot be counted at all.
 
 ## Languages of the interface
 
-English and Russian, following the system. Adding another is a file: copy
+English and Russian. The app follows the system by default, and Settings can pin it
+to either — useful if you run macOS in one language and would rather read Verto in
+another. The change applies immediately, with no restart. Adding another is a file: copy
 `Resources/en.lproj/Localizable.strings` to `<code>.lproj`, translate the right-hand
 side, add the code to `CFBundleLocalizations` in `Resources/Info.plist`.
 `make strings` then checks that every key in the code has a translation and that no

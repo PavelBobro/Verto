@@ -1,4 +1,5 @@
 import AppKit
+import Combine
 import SwiftUI
 
 /// The whole app surface: an icon in the menu bar and a popover under it.
@@ -10,6 +11,7 @@ final class MenuBarController: NSObject, NSPopoverDelegate {
     private let popover = NSPopover()
     private var hotKey: HotKey?
     private let settingsWindow = SettingsWindow()
+    private var cancellables = Set<AnyCancellable>()
 
     override init() {
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
@@ -34,6 +36,16 @@ final class MenuBarController: NSObject, NSPopoverDelegate {
 
 
         hotKey = HotKey { [weak self] in self?.toggle() }
+
+        // Menus are built once, so they have to be rebuilt when the language changes;
+        // SwiftUI views redraw on their own.
+        Settings.shared.$appLanguage
+            .dropFirst()
+            .sink { language in
+                L.use(language)
+                NSApp.mainMenu = MainMenu.build()
+            }
+            .store(in: &cancellables)
     }
 
     @objc private func handleClick() {

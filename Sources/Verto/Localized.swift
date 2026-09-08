@@ -7,12 +7,27 @@ import Foundation
 /// interface. English is the base language; the app follows the system.
 enum L {
 
+    /// Which bundle strings come from. Pointing this at a single `.lproj` is what lets
+    /// the interface change language on the spot: reading `AppleLanguages` instead
+    /// would only take effect on the next launch.
+    nonisolated(unsafe) static var bundle: Bundle = .main
+
+    static func use(_ language: AppLanguage) {
+        switch language {
+        case .system:
+            bundle = .main
+        default:
+            bundle = Bundle.main.path(forResource: language.rawValue, ofType: "lproj")
+                .flatMap(Bundle.init(path:)) ?? .main
+        }
+    }
+
     private static func t(_ key: String) -> String {
-        NSLocalizedString(key, bundle: .main, comment: "")
+        bundle.localizedString(forKey: key, value: nil, table: nil)
     }
 
     private static func t(_ key: String, _ argument: String) -> String {
-        String(format: NSLocalizedString(key, bundle: .main, comment: ""), argument)
+        String(format: bundle.localizedString(forKey: key, value: nil, table: nil), argument)
     }
 
     // Popover
@@ -48,6 +63,10 @@ enum L {
     static var launchAtLogin: String     { t("settings.launchAtLogin") }
     static var launchFailed: String      { t("settings.launchAtLogin.failed") }
 
+    // Interface language
+    static var interfaceLanguage: String { t("settings.language") }
+    static var languageSystem: String    { t("settings.language.system") }
+
     // Menus
     static var menuSettings: String      { t("menu.settings") }
     static var menuHide: String          { t("menu.hide") }
@@ -59,4 +78,22 @@ enum L {
     static var menuCopy: String          { t("menu.copy") }
     static var menuPaste: String         { t("menu.paste") }
     static var menuSelectAll: String     { t("menu.selectAll") }
+}
+
+
+/// What the interface is written in. Separate from the translation pair — the app can
+/// speak English while translating Russian.
+enum AppLanguage: String, CaseIterable, Codable, Sendable {
+    case system
+    case english = "en"
+    case russian = "ru"
+
+    /// Named in its own language, the way macOS lists languages.
+    var title: String {
+        switch self {
+        case .system:  L.languageSystem
+        case .english: "English"
+        case .russian: "Русский"
+        }
+    }
 }
