@@ -7,6 +7,11 @@ Same window, no switch to flip, nothing to click.
 
 *Verto* is Latin for "I turn; I translate" — both halves of what it does.
 
+<img src="docs/translate.jpg" width="600" alt="Verto translating a Russian phrase into English from the menu bar">
+
+Paste the reply in English and it goes the other way, in the same window, with
+nothing to switch.
+
 ---
 
 ## Why
@@ -83,6 +88,13 @@ the clock in the header — so clearing the field costs you nothing.
 Settings live behind the gear in the popover, `⌘,`, or a right-click on the menu bar
 icon. Verto has no Dock icon — it lives in the menu bar — except while the settings
 window is open, when it behaves like an ordinary app and then drops back.
+
+## Settings
+
+Two languages, a shortcut, and which language to read the app in. The direction of
+translation is not among them and never will be — that is the whole point.
+
+<img src="docs/settings.jpg" width="520" alt="Verto settings: language pair, language packs, shortcut, launch at login, interface language">
 
 ## Languages
 
