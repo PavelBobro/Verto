@@ -69,6 +69,9 @@ and are shared with every other app that uses it, so none of that ships here.
 | `⌘S` | Flip the direction, if detection got it wrong |
 | `esc` | Close |
 
+The window opens empty every time. Closing it files the translation in the history —
+the clock in the header — so clearing the field costs you nothing.
+
 `↩` inserts a line break — translation happens on its own, so Enter is free.
 
 Settings live behind the gear in the popover, `⌘,`, or a right-click on the menu bar
@@ -128,7 +131,7 @@ No signed release, so no download link.
 
 ## Roadmap
 
-Screenshot translation via OCR · translation history · text-to-speech ·
+Screenshot translation via OCR · text-to-speech ·
 optional DeepL engine · signed and notarized builds.
 
 ## License

@@ -51,3 +51,11 @@
 "settings.hotkey.recording" = "Нажмите сочетание…";
 "settings.hotkey.help"      = "Кликните и нажмите сочетание. Esc отменит, ⌫ вернёт ⌥⌘T.";
 "settings.hotkey.taken"     = "Это сочетание занято другим приложением. Выберите другое.";
+
+/* История */
+"help.clearInput" = "Очистить поле";
+"history.help"    = "История";
+"history.empty"   = "Пока пусто";
+"history.back"    = "Назад";
+"history.clear"   = "Очистить историю";
+"history.delete"  = "Удалить";

@@ -4,14 +4,17 @@ import Translation
 
 struct PopoverView: View {
 
-    /// Closing and opening windows is the controller's job, not the view's.
-    let onClose: () -> Void
-    let onOpenSettings: () -> Void
 
     // The popover is built once and lives for the whole session, so it has to watch
     // settings to redraw when the interface language changes.
     @ObservedObject private var settings = Settings.shared
-    @StateObject private var model = PopoverModel()
+    @ObservedObject var model: PopoverModel
+
+    /// Closing and opening windows is the controller's job, not the view's.
+    let onClose: () -> Void
+    let onOpenSettings: () -> Void
+
+    @State private var showingHistory = false
     @FocusState private var inputFocused: Bool
 
     var body: some View {
@@ -19,7 +22,35 @@ struct PopoverView: View {
             header
             Divider().opacity(0.5)
 
-            TextEditor(text: $model.input)
+            if showingHistory {
+                HistoryView { record in
+                    model.restore(record)
+                    showingHistory = false
+                    inputFocused = true
+                }
+                Divider().opacity(0.5)
+                historyFooter
+            } else {
+                translator
+            }
+        }
+        .frame(width: 360)
+        .frame(minHeight: 300, maxHeight: 520, alignment: .top)
+        .background(shortcuts)
+        .onAppear {
+            inputFocused = true
+            model.syncPair()
+        }
+        .translationTask(model.downloadConfiguration) { session in
+            try? await session.prepareTranslation()
+            model.downloadFinished()
+        }
+    }
+
+    private var translator: some View {
+        VStack(spacing: 0) {
+            ZStack(alignment: .topTrailing) {
+                TextEditor(text: $model.input)
                 .font(.system(size: 13))
                 .scrollContentBackground(.hidden)
                 .padding(.horizontal, 11)
@@ -27,6 +58,25 @@ struct PopoverView: View {
                 .frame(minHeight: 76, maxHeight: .infinity)
                 .focused($inputFocused)
                 .onChange(of: model.input) { _, text in model.inputChanged(text) }
+
+                // Only while there is something to clear — a permanent × in an empty
+                // field is just clutter.
+                if !model.input.isEmpty {
+                    Button {
+                        model.reset()
+                        inputFocused = true
+                    } label: {
+                        Image(systemName: "xmark.circle.fill")
+                            .font(.system(size: 13))
+                            .foregroundStyle(.tertiary)
+                    }
+                    .buttonStyle(.plain)
+                    .pointerStyle(.link)
+                    .help(L.clearInput)
+                    .padding(.top, 8)
+                    .padding(.trailing, 9)
+                }
+            }
 
             Divider().opacity(0.5).padding(.horizontal, 14)
 
@@ -38,19 +88,24 @@ struct PopoverView: View {
             Divider().opacity(0.5)
             footer
         }
-        .frame(width: 360)
-        // Base height holds until the text outgrows it, then the window grows to a
-        // ceiling and the fields scroll inside themselves (FR-8).
-        .frame(minHeight: 300, maxHeight: 520, alignment: .top)
-        .background(shortcuts)
-        .onAppear {
-            inputFocused = true
-            model.syncPair()
+    }
+
+    private var historyFooter: some View {
+        HStack {
+            Button(L.historyBack) { showingHistory = false }
+                .buttonStyle(.plain)
+                .pointerStyle(.link)
+            Spacer()
+            if !HistoryStore.shared.history.isEmpty {
+                Button(L.historyClear) { HistoryStore.shared.clear() }
+                    .buttonStyle(.plain)
+                    .pointerStyle(.link)
+            }
         }
-        .translationTask(model.downloadConfiguration) { session in
-            try? await session.prepareTranslation()
-            model.downloadFinished()
-        }
+        .font(.system(size: 11))
+        .foregroundStyle(.secondary)
+        .padding(.horizontal, 14)
+        .padding(.vertical, 8)
     }
 
     // MARK: - Keyboard
@@ -116,6 +171,17 @@ struct PopoverView: View {
             .help(L.swapHelp)
 
             Spacer()
+
+            Button { showingHistory.toggle() } label: {
+                Image(systemName: showingHistory ? "clock.fill" : "clock")
+                    .font(.system(size: 13, weight: .regular))
+                    .foregroundStyle(.secondary)
+                    .frame(width: 22, height: 22)
+                    .contentShape(Rectangle())
+            }
+            .buttonStyle(.plain)
+            .pointerStyle(.link)
+            .help(L.historyHelp)
 
             Button(action: onOpenSettings) {
                 Image(systemName: "gearshape")

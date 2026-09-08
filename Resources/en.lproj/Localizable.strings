@@ -51,3 +51,11 @@
 "settings.hotkey.recording" = "Press a shortcut…";
 "settings.hotkey.help"      = "Click, then press the combination. Esc cancels, ⌫ restores ⌥⌘T.";
 "settings.hotkey.taken"     = "Another app already uses that shortcut. Pick a different one.";
+
+/* History */
+"help.clearInput" = "Clear the field";
+"history.help"    = "History";
+"history.empty"   = "Nothing here yet";
+"history.back"    = "Back";
+"history.clear"   = "Clear history";
+"history.delete"  = "Delete";

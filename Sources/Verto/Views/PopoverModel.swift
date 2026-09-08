@@ -64,11 +64,38 @@ final class PopoverModel: ObservableObject {
         if !input.isEmpty { inputChanged(input) }
     }
 
+    /// Called when the popover closes, however it closes.
+    ///
+    /// The window reopens empty rather than holding yesterday's phrase — the app is
+    /// for pasting something new, and a field that still has old text in it has to be
+    /// cleared before it can be used. Nothing is lost: a finished translation goes to
+    /// the history on the way out.
+    func archiveAndReset() {
+        archive()
+        reset()
+    }
+
+    func archive() {
+        guard case .translated(let text) = state else { return }
+        HistoryStore.shared.add(
+            TranslationRecord(source: source, target: target,
+                              sourceText: input, targetText: text)
+        )
+    }
+
     func reset() {
         input = ""
         manualOverride = false
         isConfident = true
         service.cancel()
+    }
+
+    /// Puts a past translation back into the fields, ready to copy again.
+    func restore(_ record: TranslationRecord) {
+        manualOverride = true
+        source = record.source
+        target = record.target
+        input = record.sourceText
     }
 
     func downloadFinished() {

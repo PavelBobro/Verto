@@ -40,6 +40,14 @@ enum L {
     static var lowConfidence: String     { t("footer.lowConfidence") }
     static var swapHelp: String          { t("help.swap") }
     static var settingsHelp: String      { t("help.settings") }
+    static var clearInput: String        { t("help.clearInput") }
+
+    // History
+    static var historyHelp: String       { t("history.help") }
+    static var historyEmpty: String      { t("history.empty") }
+    static var historyBack: String       { t("history.back") }
+    static var historyClear: String      { t("history.clear") }
+    static var historyDelete: String     { t("history.delete") }
 
     // Settings
     static var settingsTitle: String     { t("settings.title") }

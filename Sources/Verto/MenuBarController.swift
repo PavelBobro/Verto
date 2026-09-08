@@ -10,6 +10,7 @@ final class MenuBarController: NSObject, NSPopoverDelegate {
     private let statusItem: NSStatusItem
     private let popover = NSPopover()
     private var hotKey: HotKey?
+    private let model = PopoverModel()
     private let settingsWindow = SettingsWindow()
     private var cancellables = Set<AnyCancellable>()
 
@@ -27,8 +28,11 @@ final class MenuBarController: NSObject, NSPopoverDelegate {
         popover.behavior = .transient
         popover.animates = false            // the point of the app is that it is instant
         popover.delegate = self
+        // The model belongs to the controller, not the view: closing the window has
+        // to archive and clear it, and the view is not around at that moment.
         popover.contentViewController = NSHostingController(
             rootView: PopoverView(
+                model: model,
                 onClose: { [weak self] in self?.close() },
                 onOpenSettings: { [weak self] in self?.openSettings() }
             )
@@ -92,6 +96,11 @@ final class MenuBarController: NSObject, NSPopoverDelegate {
 
     func close() {
         popover.performClose(nil)
+    }
+
+    /// Fires however the popover closes — esc, the shortcut, or a click elsewhere.
+    func popoverDidClose(_ notification: Notification) {
+        model.archiveAndReset()
     }
 
     /// The one feature that can legitimately fail on an ad-hoc signed build, so the
