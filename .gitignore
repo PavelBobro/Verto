@@ -3,6 +3,7 @@
 .swiftpm/
 Verto.app/
 *.dmg
+*.zip
 
 # Generated from Tools/make-icon.swift by `make icon`
 Resources/Verto.iconset/
