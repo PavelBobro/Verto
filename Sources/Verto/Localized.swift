@@ -42,6 +42,12 @@ enum L {
     static var settingsHelp: String      { t("help.settings") }
     static var clearInput: String        { t("help.clearInput") }
 
+    // Screen capture
+    static var captureHelp: String       { t("capture.help") }
+    static var recognizing: String       { t("capture.recognizing") }
+    static var recognizedNothing: String { t("capture.nothing") }
+    static var menuCapture: String       { t("menu.capture") }
+
     // History
     static var historyHelp: String       { t("history.help") }
     static var historyEmpty: String      { t("history.empty") }

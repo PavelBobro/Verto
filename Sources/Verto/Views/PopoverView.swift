@@ -13,6 +13,7 @@ struct PopoverView: View {
     /// Closing and opening windows is the controller's job, not the view's.
     let onClose: () -> Void
     let onOpenSettings: () -> Void
+    let onCaptureScreen: () -> Void
 
     @State private var showingHistory = false
     @FocusState private var inputFocused: Bool
@@ -50,6 +51,24 @@ struct PopoverView: View {
     private var translator: some View {
         VStack(spacing: 0) {
             ZStack(alignment: .topTrailing) {
+                if model.isRecognizing {
+                    HStack(spacing: 9) {
+                        ProgressView().controlSize(.small)
+                        Text(L.recognizing)
+                    }
+                    .font(.system(size: 12.5))
+                    .foregroundStyle(.secondary)
+                    .frame(maxWidth: .infinity, minHeight: 76, alignment: .topLeading)
+                    .padding(.horizontal, 15)
+                    .padding(.vertical, 13)
+                } else if model.recognizedNothing {
+                    Text(L.recognizedNothing)
+                        .font(.system(size: 12.5))
+                        .foregroundStyle(.secondary)
+                        .frame(maxWidth: .infinity, minHeight: 76, alignment: .topLeading)
+                        .padding(.horizontal, 15)
+                        .padding(.vertical, 13)
+                } else {
                 TextEditor(text: $model.input)
                 .font(.system(size: 13))
                 .scrollContentBackground(.hidden)
@@ -57,7 +76,6 @@ struct PopoverView: View {
                 .padding(.vertical, 8)
                 .frame(minHeight: 76, maxHeight: .infinity)
                 .focused($inputFocused)
-                .onChange(of: model.input) { _, text in model.inputChanged(text) }
 
                 // Only while there is something to clear — a permanent × in an empty
                 // field is just clutter.
@@ -75,6 +93,7 @@ struct PopoverView: View {
                     .help(L.clearInput)
                     .padding(.top, 8)
                     .padding(.trailing, 9)
+                }
                 }
             }
 
@@ -171,6 +190,17 @@ struct PopoverView: View {
             .help(L.swapHelp)
 
             Spacer()
+
+            Button(action: onCaptureScreen) {
+                Image(systemName: "viewfinder")
+                    .font(.system(size: 13, weight: .regular))
+                    .foregroundStyle(.secondary)
+                    .frame(width: 22, height: 22)
+                    .contentShape(Rectangle())
+            }
+            .buttonStyle(.plain)
+            .pointerStyle(.link)
+            .help(L.captureHelp)
 
             Button { showingHistory.toggle() } label: {
                 Image(systemName: showingHistory ? "clock.fill" : "clock")

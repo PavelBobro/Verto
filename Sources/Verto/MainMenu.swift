@@ -46,6 +46,13 @@ enum MainMenu {
     static func statusItemMenu(target: AnyObject) -> NSMenu {
         let menu = NSMenu()
 
+        let capture = NSMenuItem(title: L.menuCapture,
+                                 action: #selector(MenuBarController.captureScreen),
+                                 keyEquivalent: "")
+        capture.target = target
+        menu.addItem(capture)
+        menu.addItem(.separator())
+
         let settings = NSMenuItem(title: L.menuSettings,
                                   action: #selector(MenuBarController.openSettings),
                                   keyEquivalent: ",")

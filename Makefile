@@ -20,7 +20,7 @@ DMG       := $(APP)-$(VERSION).dmg
 ARM_TRIPLE := arm64-apple-$(DEPLOY)
 X86_TRIPLE := x86_64-apple-$(DEPLOY)
 
-.PHONY: all app run test strings clean sign check icon dmg zip release
+.PHONY: all app run install test strings clean sign check icon dmg zip release
 
 all: app
 
@@ -80,14 +80,43 @@ icon:
 	swift Tools/make-icon.swift Resources
 	iconutil -c icns Resources/$(APP).iconset -o Resources/$(APP).icns
 
-## Ad-hoc signature. Not --deep: Apple advises against it, and a single-binary
-## bundle has nothing nested to sign anyway.
+## Sign with the local identity when there is one, ad-hoc otherwise.
+##
+## An ad-hoc signature has no identity, so macOS recognises the app by a hash of its
+## contents: change a line of code and every permission granted — screen recording,
+## login item — belongs to what the system now treats as a different app, and it asks
+## again. A stable identity ends that. Tools/make-signing-identity.sh creates one.
+##
+## Not --deep: Apple advises against it, and a single-binary bundle has nothing
+## nested to sign anyway.
+IDENTITY := $(shell security find-identity -v -p codesigning 2>/dev/null \
+              | grep -o '"Verto Local Signing"' | head -1 | tr -d '"')
+
 sign:
+ifeq ($(IDENTITY),)
+	@echo "подписываю одноразово (Tools/make-signing-identity.sh даст постоянную подпись)"
 	codesign --force --options runtime -s - $(BUNDLE)
+else
+	codesign --force --options runtime -s "$(IDENTITY)" $(BUNDLE)
+endif
 
 ## Build and launch straight away.
 run: app
 	open $(BUNDLE)
+
+## Replace the copy in /Applications and restart it.
+##
+## Two bundles with the same identifier confuse macOS about which one to launch, and
+## permissions granted to one look like they were ignored by the other. There should
+## be exactly one installed copy, and this is how it gets replaced.
+install: app
+	@pkill -f "/Applications/$(BUNDLE)/Contents/MacOS/$(APP)" 2>/dev/null || true
+	@sleep 1
+	rm -rf /Applications/$(BUNDLE)
+	cp -R $(BUNDLE) /Applications/
+	open /Applications/$(BUNDLE)
+	@echo "installed and running from /Applications"
+
 
 ## Verify the bundle is well-formed, universal, and correctly signed.
 check: strings

@@ -34,7 +34,8 @@ final class MenuBarController: NSObject, NSPopoverDelegate {
             rootView: PopoverView(
                 model: model,
                 onClose: { [weak self] in self?.close() },
-                onOpenSettings: { [weak self] in self?.openSettings() }
+                onOpenSettings: { [weak self] in self?.openSettings() },
+                onCaptureScreen: { [weak self] in self?.captureScreen() }
             )
         )
 
@@ -105,6 +106,34 @@ final class MenuBarController: NSObject, NSPopoverDelegate {
 
     /// The one feature that can legitimately fail on an ad-hoc signed build, so the
     /// failure is shown rather than swallowed.
+    /// Capture a region of the screen, read the text in it, translate it.
+    ///
+    /// The popover has to be out of the way before the crosshair appears, or it sits
+    /// on top of whatever the user is trying to capture — and it must not archive the
+    /// current translation on the way out, because this is one continuous action.
+    @objc func captureScreen() {
+        let wasShown = popover.isShown
+        if wasShown { popover.performClose(nil) }
+
+        Task { @MainActor in
+            guard let image = await ScreenCapture.selectRegion() else {
+                // Cancelled. Put the window back the way it was.
+                if wasShown { open() }
+                return
+            }
+
+            model.reset()
+            open()
+            model.startedRecognizing()
+
+            if let text = await TextRecognizer.read(image, preferring: Settings.shared.pair) {
+                model.accept(recognized: text)
+            } else {
+                model.recognitionFoundNothing()
+            }
+        }
+    }
+
     @objc func openSettings() {
         close()
         settingsWindow.show()

@@ -59,3 +59,9 @@
 "history.back"    = "Back";
 "history.clear"   = "Clear history";
 "history.delete"  = "Delete";
+
+/* Screen capture */
+"capture.help"        = "Translate text on screen";
+"capture.recognizing" = "Reading the text…";
+"capture.nothing"     = "No text found in that area. Try selecting a tighter crop.";
+"menu.capture"        = "Translate Screen Area…";

@@ -7,11 +7,26 @@ import Translation
 @MainActor
 final class PopoverModel: ObservableObject {
 
-    @Published var input = ""
+    /// Translation starts here, not from a view modifier.
+    ///
+    /// It used to hang off `.onChange` on the text field, which meant text arriving
+    /// while the field was off screen — recognised from a screenshot, say — was never
+    /// translated at all. What the model does must not depend on what is drawn.
+    @Published var input = "" {
+        didSet {
+            guard input != oldValue else { return }
+            inputChanged(input)
+        }
+    }
     @Published private(set) var state: TranslationService.State = .idle
     @Published private(set) var source: LanguageCode
     @Published private(set) var target: LanguageCode
     @Published private(set) var isConfident = true
+
+    /// Reading text off a screenshot takes a moment, and the window is already open by
+    /// then — without this it would sit there looking empty and broken.
+    @Published private(set) var isRecognizing = false
+    @Published private(set) var recognizedNothing = false
 
     /// Non-nil only while a language pack is downloading; that is what drives the
     /// one SwiftUI path we still need (FR-7).
@@ -84,10 +99,30 @@ final class PopoverModel: ObservableObject {
     }
 
     func reset() {
+        isRecognizing = false
+        recognizedNothing = false
         input = ""
         manualOverride = false
         isConfident = true
         service.cancel()
+    }
+
+    /// Text read off the screen behaves exactly like text that was pasted: detection
+    /// runs, the direction is decided, translation follows.
+    func startedRecognizing() {
+        isRecognizing = true
+        recognizedNothing = false
+    }
+
+    func accept(recognized text: String) {
+        isRecognizing = false
+        manualOverride = false
+        input = text
+    }
+
+    func recognitionFoundNothing() {
+        isRecognizing = false
+        recognizedNothing = true
     }
 
     /// Puts a past translation back into the fields, ready to copy again.

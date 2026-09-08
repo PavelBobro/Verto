@@ -69,6 +69,11 @@ and are shared with every other app that uses it, so none of that ships here.
 | `⌘S` | Flip the direction, if detection got it wrong |
 | `esc` | Close |
 
+The viewfinder in the header translates text on screen: it hands you the same
+crosshair as `⌘⇧4`, reads the text out of whatever you select, and translates it.
+macOS asks for screen recording permission the first time, and the app has to be
+restarted once after you grant it.
+
 The window opens empty every time. Closing it files the translation in the history —
 the clock in the header — so clearing the field costs you nothing.
 
@@ -127,12 +132,15 @@ translation is left unused.
 
 ## Not there yet
 
-No signed release, so no download link.
+No signed release, so macOS asks you to approve the app once.
+
+Recognised text is put in the editable field rather than translated blind: OCR
+confuses short uppercase runs — `CI` comes out as `Cl` — and you should see that
+before you take the translation.
 
 ## Roadmap
 
-Screenshot translation via OCR · text-to-speech ·
-optional DeepL engine · signed and notarized builds.
+Search in history · faster switching between language pairs.
 
 ## License
 
