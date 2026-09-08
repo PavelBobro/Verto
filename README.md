@@ -27,7 +27,15 @@ macOS 26 or later. Apple Silicon or Intel.
 
 ## Install
 
-There is no published release yet. Build it — one command, and no Xcode:
+Open `Verto-x.y.z.dmg`, drag Verto to Applications, then clear the quarantine flag:
+
+```bash
+xattr -dr com.apple.quarantine /Applications/Verto.app
+```
+
+macOS asks for that because the app is not signed with a paid Apple Developer
+certificate. If you would rather not take an unsigned binary from a stranger, build
+it yourself — one command, and no Xcode:
 
 ```bash
 git clone https://github.com/<you>/verto.git && cd verto && make run
@@ -35,14 +43,10 @@ git clone https://github.com/<you>/verto.git && cd verto && make run
 
 Command Line Tools are enough (`xcode-select --install` if you have neither).
 `make` compiles both architectures, draws the icon, assembles `Verto.app` and signs
-it ad-hoc. Move the app to `/Applications` when you like what you see.
+it ad-hoc. `make dmg` packages the same thing as a disk image.
 
-Once a `.dmg` is published, downloading it will also mean clearing the quarantine
-flag, because the app is not signed with a paid Apple Developer certificate:
-
-```bash
-xattr -dr com.apple.quarantine /Applications/Verto.app
-```
+Verto is around 1 MB. The translation engine and the language packs belong to macOS
+and are shared with every other app that uses it, so none of that ships here.
 
 ## Use
 

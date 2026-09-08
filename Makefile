@@ -18,7 +18,7 @@ DEPLOY    := macosx26.0
 ARM_TRIPLE := arm64-apple-$(DEPLOY)
 X86_TRIPLE := x86_64-apple-$(DEPLOY)
 
-.PHONY: all app run test strings clean sign check icon
+.PHONY: all app run test strings clean sign check icon dmg
 
 all: app
 
@@ -48,6 +48,20 @@ strings:
 test: strings
 	DEVELOPER_DIR= swift test
 
+## Package Verto.app into a disk image for release.
+## hdiutil is part of macOS, so this needs no developer tooling either.
+VERSION := $(shell /usr/libexec/PlistBuddy -c "Print :CFBundleShortVersionString" Resources/Info.plist)
+DMG     := $(APP)-$(VERSION).dmg
+
+dmg: app
+	rm -rf .dmg $(DMG)
+	mkdir -p .dmg
+	cp -R $(BUNDLE) .dmg/
+	ln -s /Applications .dmg/Applications
+	hdiutil create -volname "$(APP) $(VERSION)" -srcfolder .dmg -ov -format UDZO $(DMG)
+	rm -rf .dmg
+	@echo "$(DMG) — $$(du -h $(DMG) | cut -f1)"
+
 ## Redraw the app icon from source. No asset catalogue, no Xcode.
 icon:
 	swift Tools/make-icon.swift Resources
@@ -69,4 +83,4 @@ check: strings
 	codesign --verify --verbose=2 $(BUNDLE)
 
 clean:
-	rm -rf .build $(BUNDLE) Resources/$(APP).iconset Resources/$(APP).icns
+	rm -rf .build $(BUNDLE) .dmg *.dmg Resources/$(APP).iconset Resources/$(APP).icns
