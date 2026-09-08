@@ -1,3 +1,4 @@
+import VertoCore
 import SwiftUI
 import Translation
 

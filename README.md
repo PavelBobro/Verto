@@ -81,6 +81,16 @@ scripts at once — Japanese uses kana and kanji together — and all of them co
 When the two share a writing system (EN↔DE, RU↔UK), Verto falls back to
 `NLLanguageRecognizer` and warns you when it is unsure.
 
+## Tests
+
+```bash
+make test
+```
+
+Covers the detector: the threshold cases either side of 15%, the short strings a
+language model gets wrong, Japanese written in kana and kanji at once, and the pairs
+that share a writing system and therefore cannot be counted.
+
 ## Not there yet
 
 The hotkey is fixed at `⌥⌘T` and cannot be rebound. The interface is in Russian.

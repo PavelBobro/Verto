@@ -7,13 +7,13 @@ import NaturalLanguage
 /// different scripts, counting characters beats any model: it is exact on short
 /// strings like "OK" or "Pizza", where `NLLanguageRecognizer` is unreliable.
 /// Only when both sides share a script (en/de, ru/uk) do we fall back to the model.
-enum LanguageDetector {
+public enum LanguageDetector {
 
-    struct Result {
-        let source: LanguageCode
-        let target: LanguageCode
+    public struct Result: Equatable, Sendable {
+        public let source: LanguageCode
+        public let target: LanguageCode
         /// False when the caller should warn the user (FR-6).
-        let isConfident: Bool
+        public let isConfident: Bool
     }
 
     /// Share of "own script" letters above which the text counts as that language.
@@ -21,9 +21,9 @@ enum LanguageDetector {
     /// Deliberately low: everyday Russian is full of Latin technical terms
     /// ("задеплой на staging через CI"), and a 50% threshold would send those
     /// the wrong way.
-    static let scriptThreshold = 0.15
+    public static let scriptThreshold = 0.15
 
-    static func detect(_ text: String, in pair: LanguagePair) -> Result? {
+    public static func detect(_ text: String, in pair: LanguagePair) -> Result? {
         let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmed.isEmpty else { return nil }
 

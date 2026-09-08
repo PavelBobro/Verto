@@ -18,7 +18,7 @@ DEPLOY    := macosx26.0
 ARM_TRIPLE := arm64-apple-$(DEPLOY)
 X86_TRIPLE := x86_64-apple-$(DEPLOY)
 
-.PHONY: all app run clean sign check icon
+.PHONY: all app run test clean sign check icon
 
 all: app
 
@@ -37,6 +37,10 @@ app: icon
 	printf 'APPL????' > $(CONTENTS)/PkgInfo
 	$(MAKE) sign
 	@echo "built $(BUNDLE) — $$(lipo -archs $(CONTENTS)/MacOS/$(APP))"
+
+## Run the checks on the language detector.
+test:
+	swift run -c debug VertoCheck
 
 ## Redraw the app icon from source. No asset catalogue, no Xcode.
 icon:

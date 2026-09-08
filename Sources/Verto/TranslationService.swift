@@ -1,3 +1,4 @@
+import VertoCore
 import Foundation
 import Translation
 

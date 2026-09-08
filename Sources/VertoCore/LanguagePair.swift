@@ -1,12 +1,12 @@
 import Foundation
 
 /// Writing systems, used to decide how a language is detected (FR-1).
-enum Script: Hashable {
+public enum Script: Hashable {
     case latin, cyrillic, greek, arabic, hebrew
     case han, kana, hangul, devanagari, thai
     case other
 
-    init?(_ scalar: Unicode.Scalar) {
+    public init?(_ scalar: Unicode.Scalar) {
         guard CharacterSet.letters.contains(scalar) else { return nil }
         switch scalar.value {
         case 0x0041...0x005A, 0x0061...0x007A, 0x00C0...0x024F: self = .latin
@@ -27,7 +27,7 @@ enum Script: Hashable {
 /// The languages Apple's on-device translation covers. Each carries the scripts its
 /// text is actually written in — Japanese needs three, and detection would misread it
 /// with only one.
-enum LanguageCode: String, CaseIterable, Codable, Sendable, Hashable {
+public enum LanguageCode: String, CaseIterable, Codable, Sendable, Hashable {
     case arabic     = "ar"
     case chinese    = "zh"
     case dutch      = "nl"
@@ -48,7 +48,7 @@ enum LanguageCode: String, CaseIterable, Codable, Sendable, Hashable {
     case ukrainian  = "uk"
     case vietnamese = "vi"
 
-    var scripts: Set<Script> {
+    public var scripts: Set<Script> {
         switch self {
         case .russian, .ukrainian: [.cyrillic]
         case .arabic:              [.arabic]
@@ -61,25 +61,30 @@ enum LanguageCode: String, CaseIterable, Codable, Sendable, Hashable {
         }
     }
 
-    var badge: String { rawValue.uppercased() }
+    public var badge: String { rawValue.uppercased() }
 
-    var localizedName: String {
+    public var localizedName: String {
         Locale.current.localizedString(forLanguageCode: rawValue)?.localizedCapitalized ?? rawValue
     }
 
-    var language: Locale.Language { Locale.Language(identifier: rawValue) }
+    public var language: Locale.Language { Locale.Language(identifier: rawValue) }
 }
 
 /// The pair the user picked. Direction is never stored — it is decided per input.
-struct LanguagePair: Equatable, Codable, Sendable {
-    var first: LanguageCode
-    var second: LanguageCode
+public struct LanguagePair: Equatable, Codable, Sendable {
+    public var first: LanguageCode
+    public var second: LanguageCode
 
-    static let `default` = LanguagePair(first: .russian, second: .english)
+    public init(first: LanguageCode, second: LanguageCode) {
+        self.first = first
+        self.second = second
+    }
 
-    var isValid: Bool { first != second }
+    public static let `default` = LanguagePair(first: .russian, second: .english)
+
+    public var isValid: Bool { first != second }
 
     /// True when the exact script method of FR-1 applies: no writing system is shared,
     /// so counting characters can tell the two apart with certainty.
-    var scriptsDiffer: Bool { first.scripts.isDisjoint(with: second.scripts) }
+    public var scriptsDiffer: Bool { first.scripts.isDisjoint(with: second.scripts) }
 }
