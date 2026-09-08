@@ -59,8 +59,10 @@ zip: app
 	ditto -c -k --keepParent $(BUNDLE) $(APP)-$(VERSION).zip
 	@echo "$(APP)-$(VERSION).zip — $$(du -h $(APP)-$(VERSION).zip | cut -f1)"
 
-## Both artefacts for a release.
-release: zip dmg
+## What goes on a release page. Only the zip while Verto is unsigned: a quarantined
+## disk image will not mount at all, and System Settings offers nothing to click for
+## it — the zip's refusal can at least be answered with "Open Anyway".
+release: zip
 
 ## Package Verto.app into a disk image for release.
 ## hdiutil is part of macOS, so this needs no developer tooling either.

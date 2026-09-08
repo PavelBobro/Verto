@@ -27,25 +27,27 @@ macOS 26 or later. Apple Silicon or Intel.
 
 ## Install
 
-Take the `.zip`, not the `.dmg`. Unzip it, move Verto to Applications, then:
+1. Download `Verto-x.y.z.zip` and unzip it.
+2. Drag **Verto** to your Applications folder.
+3. Open it. macOS will refuse, because Verto is not signed with a paid Apple
+   Developer certificate.
+4. Open **System Settings → Privacy & Security**, scroll to the bottom, and click
+   **Open Anyway** next to the message about Verto. Once. Then launch it again.
+
+That fourth step is macOS asking whether you trust software that did not come
+through the App Store. There is no way around it for an unsigned app, and anyone who
+tells you to disable Gatekeeper entirely is giving you bad advice.
+
+If you prefer the terminal, this does the same thing in one line:
 
 ```bash
 xattr -dr com.apple.quarantine /Applications/Verto.app
 ```
 
-Verto is not signed with a paid Apple Developer certificate, so macOS quarantines it
-and that command is how you say you trust it anyway.
+### Or build it yourself
 
-A `.dmg` is published too, but a quarantined disk image will not even mount: macOS
-reports it as **damaged**, which looks like a broken download rather than a security
-setting. If you want the disk image, clear the flag on the image first:
-
-```bash
-xattr -dr com.apple.quarantine ~/Downloads/Verto-x.y.z.dmg
-```
-
-If you would rather not take an unsigned binary from a stranger, build it yourself —
-one command, and no Xcode:
+One command, no Xcode, and nothing to approve — a build you made carries no
+quarantine flag:
 
 ```bash
 git clone https://github.com/<you>/verto.git && cd verto && make run
@@ -53,8 +55,7 @@ git clone https://github.com/<you>/verto.git && cd verto && make run
 
 Command Line Tools are enough (`xcode-select --install` if you have neither).
 `make` compiles both architectures, draws the icon, assembles `Verto.app` and signs
-it ad-hoc. `make release` packages the same thing as a zip and a disk image. A build
-you made yourself carries no quarantine flag, so none of the above applies to it.
+it ad-hoc.
 
 Verto is around 1 MB. The translation engine and the language packs belong to macOS
 and are shared with every other app that uses it, so none of that ships here.
