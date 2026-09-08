@@ -46,3 +46,8 @@
 /* Interface language */
 "settings.language"        = "Язык интерфейса";
 "settings.language.system" = "Как в системе";
+
+/* Hotkey */
+"settings.hotkey.recording" = "Нажмите сочетание…";
+"settings.hotkey.help"      = "Кликните и нажмите сочетание. Esc отменит, ⌫ вернёт ⌥⌘T.";
+"settings.hotkey.taken"     = "Это сочетание занято другим приложением. Выберите другое.";

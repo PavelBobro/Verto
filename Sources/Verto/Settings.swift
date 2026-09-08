@@ -28,6 +28,16 @@ final class Settings: ObservableObject {
         }
     }
 
+    @Published var hotKey: HotKeyCombo {
+        didSet {
+            guard hotKey != oldValue else { return }
+            store(hotKey, as: .hotKey)
+        }
+    }
+
+    /// Set when the system refuses the combination, which means something else owns it.
+    @Published var hotKeyTaken = false
+
     @Published var appLanguage: AppLanguage {
         didSet {
             guard appLanguage != oldValue else { return }
@@ -40,10 +50,14 @@ final class Settings: ObservableObject {
     /// ad-hoc signed build, and silence would look like the toggle is broken.
     @Published var lastError: String?
 
-    private enum Key: String { case pair = "languagePair" }
+    private enum Key: String {
+        case pair = "languagePair"
+        case hotKey = "hotKey"
+    }
 
     private init() {
         pair = Self.load(LanguagePair.self, as: .pair) ?? .default
+        hotKey = Self.load(HotKeyCombo.self, as: .hotKey) ?? .default
         launchAtLogin = LoginItem.isEnabled
         appLanguage = UserDefaults.standard.string(forKey: "appLanguage")
             .flatMap(AppLanguage.init(rawValue:)) ?? .system

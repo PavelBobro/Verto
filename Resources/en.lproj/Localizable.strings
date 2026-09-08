@@ -46,3 +46,8 @@
 /* Interface language */
 "settings.language"        = "Interface language";
 "settings.language.system" = "Same as system";
+
+/* Hotkey */
+"settings.hotkey.recording" = "Press a shortcut…";
+"settings.hotkey.help"      = "Click, then press the combination. Esc cancels, ⌫ restores ⌥⌘T.";
+"settings.hotkey.taken"     = "Another app already uses that shortcut. Pick a different one.";

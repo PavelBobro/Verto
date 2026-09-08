@@ -40,7 +40,10 @@ struct SettingsView: View {
 
             Section {
                 LabeledContent(L.hotkeyLabel) {
-                    Text("⌥⌘T").monospaced()
+                    HotKeyRecorder(combo: $settings.hotKey)
+                }
+                if settings.hotKeyTaken {
+                    Text(L.hotkeyTaken).font(.callout).foregroundStyle(.orange)
                 }
                 Toggle(L.launchAtLogin, isOn: $settings.launchAtLogin)
                 if let error = settings.lastError {

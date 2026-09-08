@@ -60,6 +60,9 @@ enum L {
     static func packUnsupported(_ language: String) -> String { t("settings.packs.unsupported", language) }
     static var behaviour: String         { t("settings.behaviour") }
     static var hotkeyLabel: String       { t("settings.hotkey") }
+    static var hotkeyRecording: String   { t("settings.hotkey.recording") }
+    static var hotkeyHelp: String        { t("settings.hotkey.help") }
+    static var hotkeyTaken: String       { t("settings.hotkey.taken") }
     static var launchAtLogin: String     { t("settings.launchAtLogin") }
     static var launchFailed: String      { t("settings.launchAtLogin.failed") }
 

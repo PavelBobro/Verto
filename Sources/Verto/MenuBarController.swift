@@ -35,7 +35,20 @@ final class MenuBarController: NSObject, NSPopoverDelegate {
         )
 
 
-        hotKey = HotKey { [weak self] in self?.toggle() }
+        let hotKey = HotKey { [weak self] in self?.toggle() }
+        self.hotKey = hotKey
+
+        Settings.shared.$hotKey
+            .sink { combo in
+                let registered = hotKey.register(combo)
+                // @Published fires from willSet, so the store is mid-update here.
+                // Writing another property of the same object from inside that is what
+                // makes SwiftUI complain about publishing during a view update.
+                DispatchQueue.main.async {
+                    Settings.shared.hotKeyTaken = !registered
+                }
+            }
+            .store(in: &cancellables)
 
         // Menus are built once, so they have to be rebuilt when the language changes;
         // SwiftUI views redraw on their own.

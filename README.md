@@ -48,7 +48,7 @@ xattr -dr com.apple.quarantine /Applications/Verto.app
 
 | | |
 |---|---|
-| `⌥⌘T` | Open the popover from anywhere |
+| `⌥⌘T` | Open the popover from anywhere (rebindable in Settings) |
 | `⌘↩` | Copy the translation and close |
 | `⌘S` | Flip the direction, if detection got it wrong |
 | `esc` | Close |
@@ -108,13 +108,12 @@ translation is left unused.
 
 ## Not there yet
 
-The hotkey is fixed at `⌥⌘T` and cannot be rebound. No signed release, so no
-download link.
+No signed release, so no download link.
 
 ## Roadmap
 
 Screenshot translation via OCR · translation history · text-to-speech ·
-optional DeepL engine · signed and notarized builds · custom hotkey · English UI.
+optional DeepL engine · signed and notarized builds.
 
 ## License
 
