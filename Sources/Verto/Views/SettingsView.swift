@@ -10,18 +10,18 @@ struct SettingsView: View {
     var body: some View {
         Form {
             Section {
-                Picker("Первый язык", selection: $settings.pair.first) {
+                Picker(L.firstLanguage, selection: $settings.pair.first) {
                     ForEach(LanguageCode.allCases, id: \.self) { code in
                         Text(code.localizedName).tag(code)
                     }
                 }
-                Picker("Второй язык", selection: $settings.pair.second) {
+                Picker(L.secondLanguage, selection: $settings.pair.second) {
                     ForEach(LanguageCode.allCases, id: \.self) { code in
                         Text(code.localizedName).tag(code)
                     }
                 }
             } header: {
-                Text("Пара языков")
+                Text(L.languagePair)
             } footer: {
                 Text(pairHint)
                     .font(.callout)
@@ -31,23 +31,23 @@ struct SettingsView: View {
             Section {
                 packRow
             } header: {
-                Text("Языковые пакеты")
+                Text(L.packs)
             } footer: {
-                Text("Пакеты хранятся на компьютере — после загрузки перевод работает без интернета. Скачиваются один раз для каждой пары.")
+                Text(L.packsFooter)
                     .font(.callout)
                     .foregroundStyle(.secondary)
             }
 
             Section {
-                LabeledContent("Вызов попапа") {
+                LabeledContent(L.hotkeyLabel) {
                     Text("⌥⌘T").monospaced()
                 }
-                Toggle("Запускать при входе в систему", isOn: $settings.launchAtLogin)
+                Toggle(L.launchAtLogin, isOn: $settings.launchAtLogin)
                 if let error = settings.lastError {
                     Text(error).font(.callout).foregroundStyle(.orange)
                 }
             } header: {
-                Text("Поведение")
+                Text(L.behaviour)
             }
         }
         .formStyle(.grouped)
@@ -73,13 +73,13 @@ struct SettingsView: View {
             LabeledContent(pairTitle) {
                 HStack(spacing: 7) {
                     ProgressView().controlSize(.small)
-                    Text("Проверка…").foregroundStyle(.secondary)
+                    Text(L.packChecking).foregroundStyle(.secondary)
                 }
             }
 
         case .installed:
             LabeledContent(pairTitle) {
-                Label("Установлены", systemImage: "checkmark.circle.fill")
+                Label(L.packInstalled, systemImage: "checkmark.circle.fill")
                     .foregroundStyle(.green)
                     .labelStyle(.titleAndIcon)
             }
@@ -87,8 +87,8 @@ struct SettingsView: View {
         case .available:
             LabeledContent(pairTitle) {
                 HStack(spacing: 10) {
-                    Text("Не загружены").foregroundStyle(.secondary)
-                    Button("Скачать") { packs.download() }
+                    Text(L.packMissing).foregroundStyle(.secondary)
+                    Button(L.packDownload) { packs.download() }
                 }
             }
 
@@ -96,13 +96,13 @@ struct SettingsView: View {
             LabeledContent(pairTitle) {
                 HStack(spacing: 7) {
                     ProgressView().controlSize(.small)
-                    Text("Загрузка…").foregroundStyle(.secondary)
+                    Text(L.packDownloading).foregroundStyle(.secondary)
                 }
             }
 
         case .unsupported(let code):
             LabeledContent(pairTitle) {
-                Text("Apple не переводит: \(code.localizedName)")
+                Text(L.packUnsupported(code.localizedName))
                     .foregroundStyle(.orange)
             }
 
@@ -110,7 +110,7 @@ struct SettingsView: View {
             LabeledContent(pairTitle) {
                 HStack(spacing: 10) {
                     Text(reason).foregroundStyle(.orange).lineLimit(2)
-                    Button("Ещё раз") { packs.download() }
+                    Button(L.packRetry) { packs.download() }
                 }
             }
         }
@@ -124,11 +124,11 @@ struct SettingsView: View {
     /// changes completely depending on whether the two alphabets differ.
     private var pairHint: String {
         guard settings.pair.isValid else {
-            return "Языки в паре должны быть разными."
+            return L.hintSameLanguage
         }
         if settings.pair.scriptsDiffer {
-            return "Разные алфавиты — направление определяется по написанию, точно даже на коротких фразах. Переключать ничего не нужно."
+            return L.hintScriptsDiffer
         }
-        return "Общий алфавит — направление определяет языковая модель, и на коротких фразах она может ошибаться. Verto предупредит, когда не уверен; ⌘S развернёт вручную."
+        return L.hintSharedScript
     }
 }

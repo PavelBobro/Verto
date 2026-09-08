@@ -110,7 +110,7 @@ struct PopoverView: View {
             }
             .buttonStyle(.plain)
             .pointerStyle(.link)
-            .help("Развернуть направление (⌘S)")
+            .help(L.swapHelp)
 
             Spacer()
 
@@ -123,7 +123,7 @@ struct PopoverView: View {
             }
             .buttonStyle(.plain)
             .pointerStyle(.link)
-            .help("Настройки (⌘,)")
+            .help(L.settingsHelp)
             }
         }
         .padding(.horizontal, 12)
@@ -136,10 +136,10 @@ struct PopoverView: View {
     private var output: some View {
         switch model.state {
         case .idle:
-            placeholder("Перевод появится здесь")
+            placeholder(L.outputPlaceholder)
 
         case .translating:
-            status { ProgressView().controlSize(.small); Text("Перевод…") }
+            status { ProgressView().controlSize(.small); Text(L.translating) }
 
         case .translated(let text):
             ScrollView {
@@ -154,11 +154,11 @@ struct PopoverView: View {
         case .needsDownload(let language):
             status {
                 ProgressView().controlSize(.small)
-                Text("Загрузка языка «\(language.localizedName)» — один раз")
+                Text(L.downloading(language.localizedName))
             }
 
         case .unsupported(let language):
-            message("Apple не переводит язык «\(language.localizedName)». Выберите другую пару.")
+            message(L.unsupported(language.localizedName))
 
         case .failed(let reason):
             message(reason)
@@ -203,19 +203,19 @@ struct PopoverView: View {
                 // A real button, not a caption: the shortcut is the fast path, but the
                 // hint is the only thing a first-time user sees.
                 Button(action: copyAndClose) {
-                    Text("⌘↩ Скопировать и закрыть")
+                    Text(L.copyAndClose)
                         .foregroundStyle(model.translatedText == nil ? .tertiary : .secondary)
                 }
                 .buttonStyle(.plain)
                 .pointerStyle(.link)
                 .disabled(model.translatedText == nil)
             } else {
-                Text("Направление определено предположительно")
+                Text(L.lowConfidence)
                     .foregroundStyle(.orange)
             }
 
             Spacer()
-            Text("⌘S развернуть").foregroundStyle(.tertiary)
+            Text(L.swapHint).foregroundStyle(.tertiary)
         }
         .font(.system(size: 11))
         .padding(.horizontal, 14)

@@ -3,6 +3,12 @@
 <plist version="1.0">
 <dict>
     <key>CFBundleName</key>              <string>Verto</string>
+    <key>CFBundleDevelopmentRegion</key>  <string>en</string>
+    <key>CFBundleLocalizations</key>
+    <array>
+        <string>en</string>
+        <string>ru</string>
+    </array>
     <key>CFBundleDisplayName</key>       <string>Verto</string>
     <key>CFBundleExecutable</key>        <string>Verto</string>
     <key>CFBundleIdentifier</key>        <string>app.verto.Verto</string>

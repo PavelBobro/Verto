@@ -10,11 +10,11 @@ enum LoginItem {
 
     static var statusDescription: String {
         switch SMAppService.mainApp.status {
-        case .enabled:        "включён"
-        case .notRegistered:  "не зарегистрирован"
-        case .notFound:       "не найден"
-        case .requiresApproval: "ждёт подтверждения в Системных настройках"
-        @unknown default:     "неизвестно"
+        case .enabled:        "enabled"
+        case .notRegistered:  "not registered"
+        case .notFound:       "not found"
+        case .requiresApproval: "awaiting approval in System Settings"
+        @unknown default:     "unknown"
         }
     }
 
@@ -43,9 +43,9 @@ enum LoginItem {
 
         switch set(true) {
         case .success:
-            print("register():        успех")
+            print("register():        ok")
         case .failure(let error):
-            print("register():        ОШИБКА — \(error)")
+            print("register():        FAILED — \(error)")
             print("status after:      \(statusDescription)")
             exit(1)
         }
@@ -53,8 +53,8 @@ enum LoginItem {
         print("status after:      \(statusDescription)")
 
         switch set(false) {
-        case .success:      print("unregister():      успех, система приведена в исходное состояние")
-        case .failure(let e): print("unregister():      ОШИБКА — \(e)")
+        case .success:      print("unregister():      ok, the system is back as it was")
+        case .failure(let e): print("unregister():      FAILED — \(e)")
         }
         print("status final:      \(statusDescription)")
         exit(0)

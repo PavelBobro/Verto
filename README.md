@@ -84,7 +84,7 @@ When the two share a writing system (EN↔DE, RU↔UK), Verto falls back to
 ## Tests
 
 ```bash
-swift test        # or: make test
+make test         # localisation check, then swift test
 ```
 
 Unlike the build, the tests need Xcode — swift-testing ships with it and not with the
@@ -95,10 +95,18 @@ share of the second alphabet; the short strings a language model gets wrong; Jap
 written in kana and kanji at once; and the pairs that share a writing system and
 therefore cannot be counted at all.
 
+## Languages of the interface
+
+English and Russian, following the system. Adding another is a file: copy
+`Resources/en.lproj/Localizable.strings` to `<code>.lproj`, translate the right-hand
+side, add the code to `CFBundleLocalizations` in `Resources/Info.plist`.
+`make strings` then checks that every key in the code has a translation and that no
+translation is left unused.
+
 ## Not there yet
 
-The hotkey is fixed at `⌥⌘T` and cannot be rebound. The interface is in Russian.
-No signed release, so no download link.
+The hotkey is fixed at `⌥⌘T` and cannot be rebound. No signed release, so no
+download link.
 
 ## Roadmap
 

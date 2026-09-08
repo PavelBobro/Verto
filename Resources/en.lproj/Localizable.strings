@@ -1,0 +1,44 @@
+/* Popover */
+"output.placeholder"   = "Translation appears here";
+"output.translating"   = "Translating…";
+"output.downloading"   = "Downloading %@ — once only";
+"output.unsupported"   = "Apple does not translate %@. Choose another pair.";
+"footer.copyAndClose"  = "⌘↩ Copy and close";
+"footer.swap"          = "⌘S to flip";
+"footer.lowConfidence" = "Direction is a guess";
+"help.swap"            = "Flip the direction (⌘S)";
+"help.settings"        = "Settings (⌘,)";
+
+/* Settings */
+"settings.title"               = "Verto Settings";
+"settings.pair"                = "Language pair";
+"settings.pair.first"          = "First language";
+"settings.pair.second"         = "Second language";
+"settings.hint.same"           = "The two languages have to be different.";
+"settings.hint.scripts"        = "Different alphabets, so direction is read from the writing itself — exact even on short phrases. Nothing to switch.";
+"settings.hint.model"          = "A shared alphabet, so direction comes from a language model and short phrases can fool it. Verto says when it is unsure; ⌘S flips it by hand.";
+"settings.packs"               = "Language packs";
+"settings.packs.footer"        = "Packs are stored on this Mac, so translation works offline once they are here. Downloaded once per pair.";
+"settings.packs.checking"      = "Checking…";
+"settings.packs.installed"     = "Installed";
+"settings.packs.missing"       = "Not downloaded";
+"settings.packs.download"      = "Download";
+"settings.packs.downloading"   = "Downloading…";
+"settings.packs.retry"         = "Try again";
+"settings.packs.unsupported"   = "Apple does not translate %@";
+"settings.behaviour"           = "Behaviour";
+"settings.hotkey"              = "Open the popover";
+"settings.launchAtLogin"       = "Open at login";
+"settings.launchAtLogin.failed" = "Could not change the login item";
+
+/* Menus */
+"menu.settings"  = "Settings…";
+"menu.hide"      = "Hide Verto";
+"menu.quit"      = "Quit Verto";
+"menu.edit"      = "Edit";
+"menu.undo"      = "Undo";
+"menu.redo"      = "Redo";
+"menu.cut"       = "Cut";
+"menu.copy"      = "Copy";
+"menu.paste"     = "Paste";
+"menu.selectAll" = "Select All";

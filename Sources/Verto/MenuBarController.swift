@@ -79,7 +79,7 @@ final class MenuBarController: NSObject, NSPopoverDelegate {
     @objc func toggleLaunchAtLogin() {
         if case .failure(let error) = LoginItem.set(!LoginItem.isEnabled) {
             let alert = NSAlert()
-            alert.messageText = "Не удалось изменить автозапуск"
+            alert.messageText = L.launchFailed
             alert.informativeText = error.localizedDescription
             alert.runModal()
         }

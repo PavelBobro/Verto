@@ -18,7 +18,7 @@ DEPLOY    := macosx26.0
 ARM_TRIPLE := arm64-apple-$(DEPLOY)
 X86_TRIPLE := x86_64-apple-$(DEPLOY)
 
-.PHONY: all app run test clean sign check icon
+.PHONY: all app run test strings clean sign check icon
 
 all: app
 
@@ -34,13 +34,18 @@ app: icon
 	  -output $(CONTENTS)/MacOS/$(APP)
 	cp Resources/Info.plist $(CONTENTS)/Info.plist
 	cp Resources/$(APP).icns $(CONTENTS)/Resources/
+	cp -R Resources/*.lproj $(CONTENTS)/Resources/
 	printf 'APPL????' > $(CONTENTS)/PkgInfo
 	$(MAKE) sign
 	@echo "built $(BUNDLE) — $$(lipo -archs $(CONTENTS)/MacOS/$(APP))"
 
+## Every key used in code has a translation in every language, and no more.
+strings:
+	./Tools/check-strings.sh
+
 ## Run the tests. Unlike the build, these need Xcode: swift-testing ships with it
 ## and not with the Command Line Tools.
-test:
+test: strings
 	DEVELOPER_DIR= swift test
 
 ## Redraw the app icon from source. No asset catalogue, no Xcode.
@@ -58,7 +63,7 @@ run: app
 	open $(BUNDLE)
 
 ## Verify the bundle is well-formed, universal, and correctly signed.
-check:
+check: strings
 	plutil -lint $(CONTENTS)/Info.plist
 	lipo -archs $(CONTENTS)/MacOS/$(APP)
 	codesign --verify --verbose=2 $(BUNDLE)

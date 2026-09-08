@@ -1,0 +1,44 @@
+/* Popover */
+"output.placeholder"   = "Перевод появится здесь";
+"output.translating"   = "Перевод…";
+"output.downloading"   = "Загрузка языка «%@» — один раз";
+"output.unsupported"   = "Apple не переводит язык «%@». Выберите другую пару.";
+"footer.copyAndClose"  = "⌘↩ Скопировать и закрыть";
+"footer.swap"          = "⌘S развернуть";
+"footer.lowConfidence" = "Направление определено предположительно";
+"help.swap"            = "Развернуть направление (⌘S)";
+"help.settings"        = "Настройки (⌘,)";
+
+/* Settings */
+"settings.title"               = "Настройки Verto";
+"settings.pair"                = "Пара языков";
+"settings.pair.first"          = "Первый язык";
+"settings.pair.second"         = "Второй язык";
+"settings.hint.same"           = "Языки в паре должны быть разными.";
+"settings.hint.scripts"        = "Разные алфавиты — направление определяется по написанию, точно даже на коротких фразах. Переключать ничего не нужно.";
+"settings.hint.model"          = "Общий алфавит — направление определяет языковая модель, и на коротких фразах она может ошибаться. Verto предупредит, когда не уверен; ⌘S развернёт вручную.";
+"settings.packs"               = "Языковые пакеты";
+"settings.packs.footer"        = "Пакеты хранятся на компьютере — после загрузки перевод работает без интернета. Скачиваются один раз для каждой пары.";
+"settings.packs.checking"      = "Проверка…";
+"settings.packs.installed"     = "Установлены";
+"settings.packs.missing"       = "Не загружены";
+"settings.packs.download"      = "Скачать";
+"settings.packs.downloading"   = "Загрузка…";
+"settings.packs.retry"         = "Ещё раз";
+"settings.packs.unsupported"   = "Apple не переводит: %@";
+"settings.behaviour"           = "Поведение";
+"settings.hotkey"              = "Вызов попапа";
+"settings.launchAtLogin"       = "Запускать при входе в систему";
+"settings.launchAtLogin.failed" = "Не удалось изменить автозапуск";
+
+/* Menus */
+"menu.settings"  = "Настройки…";
+"menu.hide"      = "Скрыть Verto";
+"menu.quit"      = "Выйти из Verto";
+"menu.edit"      = "Правка";
+"menu.undo"      = "Отменить";
+"menu.redo"      = "Повторить";
+"menu.cut"       = "Вырезать";
+"menu.copy"      = "Копировать";
+"menu.paste"     = "Вставить";
+"menu.selectAll" = "Выбрать все";
