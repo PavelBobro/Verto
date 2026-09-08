@@ -18,13 +18,10 @@ let package = Package(
             path: "Sources/Verto",
             swiftSettings: [.swiftLanguageMode(.v5)]
         ),
-        // Run with `make test`. A plain executable rather than a test target:
-        // XCTest and swift-testing both ship only with Xcode, and Verto is meant to
-        // be buildable — and checkable — without it.
-        .executableTarget(
-            name: "VertoCheck",
+        .testTarget(
+            name: "VertoCoreTests",
             dependencies: ["VertoCore"],
-            path: "Sources/VertoCheck",
+            path: "Tests/VertoCoreTests",
             swiftSettings: [.swiftLanguageMode(.v5)]
         )
     ]

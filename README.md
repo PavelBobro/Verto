@@ -84,12 +84,16 @@ When the two share a writing system (EN↔DE, RU↔UK), Verto falls back to
 ## Tests
 
 ```bash
-make test
+swift test        # or: make test
 ```
 
-Covers the detector: the threshold cases either side of 15%, the short strings a
-language model gets wrong, Japanese written in kana and kanji at once, and the pairs
-that share a writing system and therefore cannot be counted.
+Unlike the build, the tests need Xcode — swift-testing ships with it and not with the
+Command Line Tools.
+
+They cover the detector: the threshold cases either side of 15%, each stating its
+share of the second alphabet; the short strings a language model gets wrong; Japanese
+written in kana and kanji at once; and the pairs that share a writing system and
+therefore cannot be counted at all.
 
 ## Not there yet
 

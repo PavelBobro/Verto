@@ -38,9 +38,10 @@ app: icon
 	$(MAKE) sign
 	@echo "built $(BUNDLE) — $$(lipo -archs $(CONTENTS)/MacOS/$(APP))"
 
-## Run the checks on the language detector.
+## Run the tests. Unlike the build, these need Xcode: swift-testing ships with it
+## and not with the Command Line Tools.
 test:
-	swift run -c debug VertoCheck
+	DEVELOPER_DIR= swift test
 
 ## Redraw the app icon from source. No asset catalogue, no Xcode.
 icon:
