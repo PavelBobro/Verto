@@ -1,0 +1,15 @@
+# Build products
+.build/
+.swiftpm/
+Verto.app/
+*.dmg
+
+# Generated from Tools/make-icon.swift by `make icon`
+Resources/Verto.iconset/
+Resources/Verto.icns
+
+# Design references, published separately as artifacts
+mockup.html
+icons.html
+
+.DS_Store

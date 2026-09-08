@@ -1,0 +1,96 @@
+# Verto
+
+A menu bar translator for macOS that never asks which way to translate.
+
+Pick a language pair once. Paste Russian, get English. Paste English, get Russian.
+Same window, no switch to flip, nothing to click.
+
+*Verto* is Latin for "I turn; I translate" — both halves of what it does.
+
+---
+
+## Why
+
+Every translator app makes you set a direction, and then punishes you for pasting
+text that goes the other way. You lose a few seconds, every other time you use it.
+Verto has no direction setting at all: it reads the text and decides.
+
+- **Offline and free.** Uses Apple's on-device `Translation.framework`.
+  No API keys, no accounts, no network, no telemetry.
+- **Instant.** Translation starts 300 ms after you stop typing. Nothing to press.
+- **Native.** Liquid Glass, SF Pro, standard controls. It looks like it shipped
+  with the system.
+
+## Requirements
+
+macOS 26 or later. Apple Silicon or Intel.
+
+## Install
+
+There is no published release yet. Build it — one command, and no Xcode:
+
+```bash
+git clone https://github.com/<you>/verto.git && cd verto && make run
+```
+
+Command Line Tools are enough (`xcode-select --install` if you have neither).
+`make` compiles both architectures, draws the icon, assembles `Verto.app` and signs
+it ad-hoc. Move the app to `/Applications` when you like what you see.
+
+Once a `.dmg` is published, downloading it will also mean clearing the quarantine
+flag, because the app is not signed with a paid Apple Developer certificate:
+
+```bash
+xattr -dr com.apple.quarantine /Applications/Verto.app
+```
+
+## Use
+
+| | |
+|---|---|
+| `⌥⌘T` | Open the popover from anywhere |
+| `⌘↩` | Copy the translation and close |
+| `⌘S` | Flip the direction, if detection got it wrong |
+| `esc` | Close |
+
+`↩` inserts a line break — translation happens on its own, so Enter is free.
+
+Settings live behind the gear in the popover, `⌘,`, or a right-click on the menu bar
+icon.
+
+## Languages
+
+Any two of the 19 languages Apple translates on device: Arabic, Chinese, Dutch,
+English, French, German, Hindi, Indonesian, Italian, Japanese, Korean, Polish,
+Portuguese, Russian, Spanish, Thai, Turkish, Ukrainian, Vietnamese.
+
+Language packs download once per pair, from Settings, and translation is offline
+afterwards. Packs are directional, so Verto fetches both ways for you.
+
+## How direction detection works
+
+When the two languages use different writing systems (RU↔EN, JA↔EN, AR↔FR), Verto
+counts characters instead of running a language model. Models are unreliable on short
+strings — ask one about "OK" or "Pizza" — and counting is exact and instant.
+
+Only letters belonging to one of the two chosen languages get a vote. The threshold is
+15% rather than 50%, because real writing is mixed: *"задеплой на staging через CI"*
+is a Russian sentence with three English words in it. A language may use several
+scripts at once — Japanese uses kana and kanji together — and all of them count.
+
+When the two share a writing system (EN↔DE, RU↔UK), Verto falls back to
+`NLLanguageRecognizer` and warns you when it is unsure.
+
+## Not there yet
+
+The hotkey is fixed at `⌥⌘T` and cannot be rebound. The interface is in Russian.
+No signed release, so no download link.
+
+## Roadmap
+
+Screenshot translation via OCR · translation history · text-to-speech ·
+optional DeepL engine · signed and notarized builds · custom hotkey · English UI.
+
+## License
+
+MIT
