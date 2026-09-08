@@ -6,11 +6,13 @@
 # no part of Xcode.
 export DEVELOPER_DIR ?= /Library/Developer/CommandLineTools
 
+VERSION   := $(shell /usr/libexec/PlistBuddy -c "Print :CFBundleShortVersionString" Resources/Info.plist)
 APP       := Verto
 BUNDLE    := $(APP).app
 CONTENTS  := $(BUNDLE)/Contents
 CONFIG    ?= release
 DEPLOY    := macosx26.0
+DMG       := $(APP)-$(VERSION).dmg
 
 # Each architecture is built on its own and the results are joined with lipo.
 # `swift build --arch a --arch b` would produce a universal binary in one pass, but it
@@ -18,7 +20,7 @@ DEPLOY    := macosx26.0
 ARM_TRIPLE := arm64-apple-$(DEPLOY)
 X86_TRIPLE := x86_64-apple-$(DEPLOY)
 
-.PHONY: all app run test strings clean sign check icon dmg
+.PHONY: all app run test strings clean sign check icon dmg zip release
 
 all: app
 
@@ -48,11 +50,20 @@ strings:
 test: strings
 	DEVELOPER_DIR= swift test
 
+## Zip the app for release. Preferred over the disk image while Verto is unsigned:
+## a quarantined .dmg refuses to mount at all and macOS calls it "damaged", which
+## reads as a corrupt download. A quarantined .zip extracts fine and the warning
+## arrives at launch instead, where it can be answered.
+zip: app
+	rm -f $(APP)-$(VERSION).zip
+	ditto -c -k --keepParent $(BUNDLE) $(APP)-$(VERSION).zip
+	@echo "$(APP)-$(VERSION).zip — $$(du -h $(APP)-$(VERSION).zip | cut -f1)"
+
+## Both artefacts for a release.
+release: zip dmg
+
 ## Package Verto.app into a disk image for release.
 ## hdiutil is part of macOS, so this needs no developer tooling either.
-VERSION := $(shell /usr/libexec/PlistBuddy -c "Print :CFBundleShortVersionString" Resources/Info.plist)
-DMG     := $(APP)-$(VERSION).dmg
-
 dmg: app
 	rm -rf .dmg $(DMG)
 	mkdir -p .dmg
@@ -83,4 +94,4 @@ check: strings
 	codesign --verify --verbose=2 $(BUNDLE)
 
 clean:
-	rm -rf .build $(BUNDLE) .dmg *.dmg Resources/$(APP).iconset Resources/$(APP).icns
+	rm -rf .build $(BUNDLE) .dmg *.dmg *.zip Resources/$(APP).iconset Resources/$(APP).icns

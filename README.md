@@ -27,15 +27,25 @@ macOS 26 or later. Apple Silicon or Intel.
 
 ## Install
 
-Open `Verto-x.y.z.dmg`, drag Verto to Applications, then clear the quarantine flag:
+Take the `.zip`, not the `.dmg`. Unzip it, move Verto to Applications, then:
 
 ```bash
 xattr -dr com.apple.quarantine /Applications/Verto.app
 ```
 
-macOS asks for that because the app is not signed with a paid Apple Developer
-certificate. If you would rather not take an unsigned binary from a stranger, build
-it yourself — one command, and no Xcode:
+Verto is not signed with a paid Apple Developer certificate, so macOS quarantines it
+and that command is how you say you trust it anyway.
+
+A `.dmg` is published too, but a quarantined disk image will not even mount: macOS
+reports it as **damaged**, which looks like a broken download rather than a security
+setting. If you want the disk image, clear the flag on the image first:
+
+```bash
+xattr -dr com.apple.quarantine ~/Downloads/Verto-x.y.z.dmg
+```
+
+If you would rather not take an unsigned binary from a stranger, build it yourself —
+one command, and no Xcode:
 
 ```bash
 git clone https://github.com/<you>/verto.git && cd verto && make run
@@ -43,7 +53,8 @@ git clone https://github.com/<you>/verto.git && cd verto && make run
 
 Command Line Tools are enough (`xcode-select --install` if you have neither).
 `make` compiles both architectures, draws the icon, assembles `Verto.app` and signs
-it ad-hoc. `make dmg` packages the same thing as a disk image.
+it ad-hoc. `make release` packages the same thing as a zip and a disk image. A build
+you made yourself carries no quarantine flag, so none of the above applies to it.
 
 Verto is around 1 MB. The translation engine and the language packs belong to macOS
 and are shared with every other app that uses it, so none of that ships here.
