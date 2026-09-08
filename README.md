@@ -56,7 +56,8 @@ xattr -dr com.apple.quarantine /Applications/Verto.app
 `↩` inserts a line break — translation happens on its own, so Enter is free.
 
 Settings live behind the gear in the popover, `⌘,`, or a right-click on the menu bar
-icon.
+icon. Verto has no Dock icon — it lives in the menu bar — except while the settings
+window is open, when it behaves like an ordinary app and then drops back.
 
 ## Languages
 
