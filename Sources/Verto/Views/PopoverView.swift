@@ -253,11 +253,11 @@ struct PopoverView: View {
         case .needsDownload(let language):
             status {
                 ProgressView().controlSize(.small)
-                Text(L.downloading(language.localizedName))
+                Text(L.downloading(language.name(in: L.locale)))
             }
 
         case .unsupported(let language):
-            message(L.unsupported(language.localizedName))
+            message(L.unsupported(language.name(in: L.locale)))
 
         case .failed(let reason):
             message(reason)

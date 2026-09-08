@@ -1,3 +1,4 @@
+import VertoCore
 import AppKit
 
 /// Plain AppKit entry point rather than SwiftUI's `@main`: it keeps the app buildable
@@ -13,6 +14,19 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
 if CommandLine.arguments.contains("--probe-login-item") {
     LoginItem.runProbe()
+}
+
+if CommandLine.arguments.contains("--probe-locale") {
+    MainActor.assumeIsolated {
+        let settings = Settings.shared
+        print("appLanguage: \(settings.appLanguage.rawValue)")
+        print("L.locale:    \(L.locale.identifier)")
+        print("L.bundle:    \(L.bundle.bundlePath.split(separator: "/").last ?? "?")")
+        for code in [LanguageCode.russian, .english, .japanese] {
+            print("  \(code.rawValue) → \(code.name(in: L.locale))")
+        }
+    }
+    exit(0)
 }
 
 let app = NSApplication.shared

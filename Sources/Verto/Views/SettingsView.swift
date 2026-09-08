@@ -12,12 +12,12 @@ struct SettingsView: View {
             Section {
                 Picker(L.firstLanguage, selection: $settings.pair.first) {
                     ForEach(LanguageCode.allCases, id: \.self) { code in
-                        Text(code.localizedName).tag(code)
+                        Text(code.name(in: L.locale)).tag(code)
                     }
                 }
                 Picker(L.secondLanguage, selection: $settings.pair.second) {
                     ForEach(LanguageCode.allCases, id: \.self) { code in
-                        Text(code.localizedName).tag(code)
+                        Text(code.name(in: L.locale)).tag(code)
                     }
                 }
             } header: {
@@ -113,7 +113,7 @@ struct SettingsView: View {
 
         case .unsupported(let code):
             LabeledContent(pairTitle) {
-                Text(L.packUnsupported(code.localizedName))
+                Text(L.packUnsupported(code.name(in: L.locale)))
                     .foregroundStyle(.orange)
             }
 

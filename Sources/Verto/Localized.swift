@@ -12,13 +12,20 @@ enum L {
     /// would only take effect on the next launch.
     nonisolated(unsafe) static var bundle: Bundle = .main
 
+    /// The locale the interface is being read in. Anything the system localises for
+    /// us — language names, dates — has to go through this, or it follows the Mac's
+    /// language while the rest of the window follows the chosen one.
+    nonisolated(unsafe) static var locale: Locale = .current
+
     static func use(_ language: AppLanguage) {
         switch language {
         case .system:
             bundle = .main
+            locale = .current
         default:
             bundle = Bundle.main.path(forResource: language.rawValue, ofType: "lproj")
                 .flatMap(Bundle.init(path:)) ?? .main
+            locale = Locale(identifier: language.rawValue)
         }
     }
 

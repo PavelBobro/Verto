@@ -1,4 +1,5 @@
 import AppKit
+import Combine
 import SwiftUI
 
 /// Keeps the single settings window alive, and lends the app a Dock icon for as long
@@ -12,6 +13,20 @@ import SwiftUI
 final class SettingsWindow: NSObject, NSWindowDelegate {
 
     private var window: NSWindow?
+    private var cancellables = Set<AnyCancellable>()
+
+    override init() {
+        super.init()
+        // The language is usually changed from inside this very window, and an AppKit
+        // title does not redraw itself the way the SwiftUI content does.
+        Settings.shared.$appLanguage
+            .dropFirst()
+            .sink { [weak self] language in
+                L.use(language)
+                self?.window?.title = L.settingsTitle
+            }
+            .store(in: &cancellables)
+    }
 
     func show() {
         if window == nil {

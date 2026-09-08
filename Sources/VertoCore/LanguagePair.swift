@@ -63,9 +63,15 @@ public enum LanguageCode: String, CaseIterable, Codable, Sendable, Hashable {
 
     public var badge: String { rawValue.uppercased() }
 
-    public var localizedName: String {
-        Locale.current.localizedString(forLanguageCode: rawValue)?.localizedCapitalized ?? rawValue
+    /// Named in the language the interface is in, which is not necessarily the
+    /// system's: someone reading Verto in English should see "Russian", not
+    /// "Русский", even on a Russian Mac.
+    public func name(in locale: Locale) -> String {
+        locale.localizedString(forLanguageCode: rawValue)?
+            .capitalized(with: locale) ?? rawValue
     }
+
+    public var localizedName: String { name(in: .current) }
 
     public var language: Locale.Language { Locale.Language(identifier: rawValue) }
 }
