@@ -12,5 +12,6 @@ Resources/Verto.icns
 # Design references, published separately as artifacts
 mockup.html
 icons.html
+# (docs/ is tracked — the README needs the screenshots)
 
 .DS_Store

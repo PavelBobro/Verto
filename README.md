@@ -27,7 +27,8 @@ macOS 26 or later. Apple Silicon or Intel.
 
 ## Install
 
-1. Download `Verto-x.y.z.zip` and unzip it.
+1. Download the `.zip` from [the latest release](https://github.com/PavelBobro/Verto/releases/latest)
+   and unzip it.
 2. Drag **Verto** to your Applications folder.
 3. Open it. macOS will refuse, because Verto is not signed with a paid Apple
    Developer certificate.
@@ -50,7 +51,7 @@ One command, no Xcode, and nothing to approve — a build you made carries no
 quarantine flag:
 
 ```bash
-git clone https://github.com/<you>/verto.git && cd verto && make run
+git clone https://github.com/PavelBobro/Verto.git && cd Verto && make run
 ```
 
 Command Line Tools are enough (`xcode-select --install` if you have neither).
@@ -125,7 +126,7 @@ therefore cannot be counted at all.
 English and Russian. The app follows the system by default, and Settings can pin it
 to either — useful if you run macOS in one language and would rather read Verto in
 another. The change applies immediately, with no restart. Adding another is a file: copy
-`Resources/en.lproj/Localizable.strings` to `<code>.lproj`, translate the right-hand
+`Resources/en.lproj/Localizable.strings` to a folder named after the language code — `de.lproj`, say, translate the right-hand
 side, add the code to `CFBundleLocalizations` in `Resources/Info.plist`.
 `make strings` then checks that every key in the code has a translation and that no
 translation is left unused.
