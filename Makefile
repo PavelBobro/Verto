@@ -54,7 +54,12 @@ test: strings
 ## a quarantined .dmg refuses to mount at all and macOS calls it "damaged", which
 ## reads as a corrupt download. A quarantined .zip extracts fine and the warning
 ## arrives at launch instead, where it can be answered.
-zip: app
+## Built ad-hoc on purpose, even when a local identity exists: that certificate is
+## trusted on this machine and nowhere else, so shipping it would hand strangers a
+## signature from an authority they have no reason to accept. Ad-hoc is the case that
+## has actually been tested on other people's machines.
+zip:
+	$(MAKE) app IDENTITY=
 	rm -f $(APP)-$(VERSION).zip
 	ditto -c -k --keepParent $(BUNDLE) $(APP)-$(VERSION).zip
 	@echo "$(APP)-$(VERSION).zip — $$(du -h $(APP)-$(VERSION).zip | cut -f1)"
