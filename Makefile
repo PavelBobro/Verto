@@ -18,8 +18,10 @@ DEPLOY    := macosx26.0
 DMG       := $(APP)-$(VERSION).dmg
 
 # Each architecture is built on its own and the results are joined with lipo.
-# `swift build --arch a --arch b` would produce a universal binary in one pass, but it
-# needs xcbuild, which ships only with Xcode.
+# `swift build --arch a --arch b` does it in one pass on the macOS 27 toolchain, but
+# on earlier ones it needs xcbuild, which ships only with Xcode. Each gets its own
+# scratch path: from Swift 6.4 both triples otherwise land in the same Products/
+# folder, the second overwrites the first, and lipo is handed one file twice.
 ARM_TRIPLE := arm64-apple-$(DEPLOY)
 X86_TRIPLE := x86_64-apple-$(DEPLOY)
 
@@ -29,13 +31,13 @@ all: app
 
 ## Compile both architectures, assemble Verto.app, sign it ad-hoc.
 app: icon
-	swift build -c $(CONFIG) --triple $(ARM_TRIPLE)
-	swift build -c $(CONFIG) --triple $(X86_TRIPLE)
+	swift build -c $(CONFIG) --triple $(ARM_TRIPLE) --scratch-path .build/arm64
+	swift build -c $(CONFIG) --triple $(X86_TRIPLE) --scratch-path .build/x86_64
 	rm -rf $(BUNDLE)
 	mkdir -p $(OUT) $(CONTENTS)/MacOS $(CONTENTS)/Resources
 	lipo -create \
-	  "$$(swift build -c $(CONFIG) --triple $(ARM_TRIPLE) --show-bin-path)/$(APP)" \
-	  "$$(swift build -c $(CONFIG) --triple $(X86_TRIPLE) --show-bin-path)/$(APP)" \
+	  "$$(swift build -c $(CONFIG) --triple $(ARM_TRIPLE) --scratch-path .build/arm64 --show-bin-path)/$(APP)" \
+	  "$$(swift build -c $(CONFIG) --triple $(X86_TRIPLE) --scratch-path .build/x86_64 --show-bin-path)/$(APP)" \
 	  -output $(CONTENTS)/MacOS/$(APP)
 	cp Resources/Info.plist $(CONTENTS)/Info.plist
 	cp Resources/$(APP).icns $(CONTENTS)/Resources/
