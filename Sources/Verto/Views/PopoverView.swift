@@ -15,7 +15,6 @@ struct PopoverView: View {
     let onOpenSettings: () -> Void
     let onCaptureScreen: () -> Void
 
-    @State private var showingHistory = false
     @FocusState private var inputFocused: Bool
 
     var body: some View {
@@ -23,10 +22,10 @@ struct PopoverView: View {
             header
             Divider().opacity(0.5)
 
-            if showingHistory {
+            if model.showingHistory {
                 HistoryView { record in
                     model.restore(record)
-                    showingHistory = false
+                    model.showingHistory = false
                     inputFocused = true
                 }
                 Divider().opacity(0.5)
@@ -43,7 +42,12 @@ struct PopoverView: View {
             model.syncPair()
         }
         .translationTask(model.downloadConfiguration) { session in
-            try? await session.prepareTranslation()
+            do {
+                try await session.prepareTranslation()
+                TranslationService.log.info("prepareTranslation finished")
+            } catch {
+                TranslationService.log.error("prepareTranslation failed: \(String(describing: error), privacy: .public)")
+            }
             model.downloadFinished()
         }
     }
@@ -111,7 +115,7 @@ struct PopoverView: View {
 
     private var historyFooter: some View {
         HStack {
-            Button(L.historyBack) { showingHistory = false }
+            Button(L.historyBack) { model.showingHistory = false }
                 .buttonStyle(.plain)
                 .pointerStyle(.link)
             Spacer()
@@ -202,8 +206,8 @@ struct PopoverView: View {
             .pointerStyle(.link)
             .help(L.captureHelp)
 
-            Button { showingHistory.toggle() } label: {
-                Image(systemName: showingHistory ? "clock.fill" : "clock")
+            Button { model.showingHistory.toggle() } label: {
+                Image(systemName: model.showingHistory ? "clock.fill" : "clock")
                     .font(.system(size: 13, weight: .regular))
                     .foregroundStyle(.secondary)
                     .frame(width: 22, height: 22)

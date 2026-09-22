@@ -8,7 +8,10 @@ export DEVELOPER_DIR ?= /Library/Developer/CommandLineTools
 
 VERSION   := $(shell /usr/libexec/PlistBuddy -c "Print :CFBundleShortVersionString" Resources/Info.plist)
 APP       := Verto
-BUNDLE    := $(APP).app
+# Built under a .noindex folder: Spotlight and Launchpad skip those, so the build
+# product never shows up next to the installed copy as a second "Verto".
+OUT       := build.noindex
+BUNDLE    := $(OUT)/$(APP).app
 CONTENTS  := $(BUNDLE)/Contents
 CONFIG    ?= release
 DEPLOY    := macosx26.0
@@ -29,7 +32,7 @@ app: icon
 	swift build -c $(CONFIG) --triple $(ARM_TRIPLE)
 	swift build -c $(CONFIG) --triple $(X86_TRIPLE)
 	rm -rf $(BUNDLE)
-	mkdir -p $(CONTENTS)/MacOS $(CONTENTS)/Resources
+	mkdir -p $(OUT) $(CONTENTS)/MacOS $(CONTENTS)/Resources
 	lipo -create \
 	  "$$(swift build -c $(CONFIG) --triple $(ARM_TRIPLE) --show-bin-path)/$(APP)" \
 	  "$$(swift build -c $(CONFIG) --triple $(X86_TRIPLE) --show-bin-path)/$(APP)" \
@@ -45,10 +48,17 @@ app: icon
 strings:
 	./Tools/check-strings.sh
 
-## Run the tests. Unlike the build, these need Xcode: swift-testing ships with it
-## and not with the Command Line Tools.
+## Run the tests.
+##
+## From the macOS 27 Command Line Tools on, swift-testing ships without Xcode — but
+## its macro plugin sits in plugins/testing/, which the build system does not search,
+## so every @Test fails with "plugin for module 'TestingMacros' not found". The path
+## is passed explicitly when that folder exists.
+TESTING_PLUGINS := $(DEVELOPER_DIR)/usr/lib/swift/host/plugins/testing
+TEST_FLAGS      := $(if $(wildcard $(TESTING_PLUGINS)),-Xswiftc -plugin-path -Xswiftc $(TESTING_PLUGINS))
+
 test: strings
-	DEVELOPER_DIR= swift test
+	swift test $(TEST_FLAGS)
 
 ## Zip the app for release. Preferred over the disk image while Verto is unsigned:
 ## a quarantined .dmg refuses to mount at all and macOS calls it "damaged", which
@@ -115,11 +125,11 @@ run: app
 ## permissions granted to one look like they were ignored by the other. There should
 ## be exactly one installed copy, and this is how it gets replaced.
 install: app
-	@pkill -f "/Applications/$(BUNDLE)/Contents/MacOS/$(APP)" 2>/dev/null || true
+	@pkill -f "/Applications/$(APP).app/Contents/MacOS/$(APP)" 2>/dev/null || true
 	@sleep 1
-	rm -rf /Applications/$(BUNDLE)
-	cp -R $(BUNDLE) /Applications/
-	open /Applications/$(BUNDLE)
+	rm -rf /Applications/$(APP).app
+	cp -R $(BUNDLE) /Applications/$(APP).app
+	open /Applications/$(APP).app
 	@echo "installed and running from /Applications"
 
 
@@ -130,4 +140,4 @@ check: strings
 	codesign --verify --verbose=2 $(BUNDLE)
 
 clean:
-	rm -rf .build $(BUNDLE) .dmg *.dmg *.zip Resources/$(APP).iconset Resources/$(APP).icns
+	rm -rf .build $(OUT) .dmg *.dmg *.zip Resources/$(APP).iconset Resources/$(APP).icns

@@ -23,6 +23,11 @@ final class PopoverModel: ObservableObject {
     @Published private(set) var target: LanguageCode
     @Published private(set) var isConfident = true
 
+    /// Lives in the model rather than as @State in the view. On the macOS 27 SDK,
+    /// @State is a macro whose implementation ships only with Xcode, so a view using
+    /// it no longer builds with the Command Line Tools alone.
+    @Published var showingHistory = false
+
     /// Reading text off a screenshot takes a moment, and the window is already open by
     /// then — without this it would sit there looking empty and broken.
     @Published private(set) var isRecognizing = false
@@ -43,10 +48,24 @@ final class PopoverModel: ObservableObject {
         service.onChange = { [weak self] state in
             guard let self else { return }
             self.state = state
-            if case .needsDownload = state {
-                self.downloadConfiguration = TranslationSession.Configuration(
+            switch state {
+            case .needsDownload:
+                // A fresh configuration equal to the previous one does not restart
+                // .translationTask, so an earlier, abandoned download would leave the
+                // spinner up for good. invalidate() forces the task to run again.
+                var configuration = TranslationSession.Configuration(
                     source: self.source.language, target: self.target.language
                 )
+                if self.downloadConfiguration == configuration {
+                    configuration.invalidate()
+                }
+                self.downloadConfiguration = configuration
+                TranslationService.log.info("download requested \(self.source.rawValue, privacy: .public)→\(self.target.rawValue, privacy: .public)")
+            case .translated, .idle, .failed, .unsupported:
+                // Anything that is not waiting for a pack means no download is pending.
+                self.downloadConfiguration = nil
+            case .translating:
+                break
             }
         }
     }
@@ -99,6 +118,8 @@ final class PopoverModel: ObservableObject {
     }
 
     func reset() {
+        downloadConfiguration = nil
+        showingHistory = false
         isRecognizing = false
         recognizedNothing = false
         input = ""

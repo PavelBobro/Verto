@@ -1,5 +1,6 @@
 import VertoCore
 import Foundation
+import os
 import Translation
 
 /// Wraps `Translation.framework`.
@@ -19,7 +20,19 @@ final class TranslationService {
         case failed(String)
     }
 
-    private(set) var state: State = .idle { didSet { onChange?(state) } }
+    private(set) var state: State = .idle {
+        didSet {
+            Self.log.debug("state → \(String(describing: self.state), privacy: .public)")
+            onChange?(state)
+        }
+    }
+
+    static let log = Logger(subsystem: "app.verto.Verto", category: "translation")
+
+    /// Bumped on every request. A run only writes its result if it is still the
+    /// latest one — otherwise a slow, superseded check can land after a newer one and
+    /// put stale state on screen.
+    private var generation = 0
     var onChange: ((State) -> Void)?
 
     /// Time to wait after the last keystroke. Long enough that typing does not fire
@@ -44,10 +57,12 @@ final class TranslationService {
             return
         }
 
+        generation += 1
+        let current = generation
         work = Task { [weak self] in
             try? await Task.sleep(for: Self.debounce)
             guard !Task.isCancelled else { return }
-            await self?.run(trimmed, from: source, to: target)
+            await self?.run(trimmed, from: source, to: target, generation: current)
         }
     }
 
@@ -68,10 +83,15 @@ final class TranslationService {
 
     // MARK: - Private
 
-    private func run(_ text: String, from source: LanguageCode, to target: LanguageCode) async {
+    private func run(_ text: String, from source: LanguageCode, to target: LanguageCode,
+                     generation current: Int) async {
         state = .translating
 
-        switch await LanguageAvailability().status(from: source.language, to: target.language) {
+        let status = await LanguageAvailability().status(from: source.language, to: target.language)
+        Self.log.info("availability \(source.rawValue, privacy: .public)→\(target.rawValue, privacy: .public) = \(String(describing: status), privacy: .public), generation \(current) of \(self.generation)")
+        guard current == generation, !Task.isCancelled else { return }
+
+        switch status {
         case .unsupported:
             state = .unsupported(source)
             return
@@ -91,7 +111,7 @@ final class TranslationService {
 
         do {
             let response = try await session(for: source, to: target).translate(text)
-            guard !Task.isCancelled else { return }
+            guard current == generation, !Task.isCancelled else { return }
             state = .translated(response.targetText)
         } catch is CancellationError {
             // Superseded by newer input — leave the previous result on screen.

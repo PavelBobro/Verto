@@ -5,8 +5,11 @@ import SwiftUI
 struct HotKeyRecorder: View {
 
     @Binding var combo: HotKeyCombo
-    @State private var isRecording = false
-    @State private var monitor: Any?
+    // An object rather than @State: on the macOS 27 SDK @State is a macro whose
+    // implementation ships only with Xcode, and Verto builds without it.
+    @StateObject private var recorder = Recorder()
+
+    private var isRecording: Bool { recorder.isRecording }
 
     var body: some View {
         Button(action: toggle) {
@@ -34,10 +37,10 @@ struct HotKeyRecorder: View {
     }
 
     private func start() {
-        isRecording = true
+        recorder.isRecording = true
         // A local monitor is enough: recording only happens while the settings window
         // has focus, and swallowing the event stops it reaching the button underneath.
-        monitor = NSEvent.addLocalMonitorForEvents(matching: .keyDown) { event in
+        recorder.monitor = NSEvent.addLocalMonitorForEvents(matching: .keyDown) { event in
             switch Int(event.keyCode) {
             case 53:                     // esc — leave the shortcut as it was
                 stop()
@@ -57,8 +60,14 @@ struct HotKeyRecorder: View {
     }
 
     private func stop() {
-        if let monitor { NSEvent.removeMonitor(monitor) }
-        monitor = nil
-        isRecording = false
+        if let monitor = recorder.monitor { NSEvent.removeMonitor(monitor) }
+        recorder.monitor = nil
+        recorder.isRecording = false
     }
+}
+
+@MainActor
+private final class Recorder: ObservableObject {
+    @Published var isRecording = false
+    var monitor: Any?
 }

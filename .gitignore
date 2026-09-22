@@ -2,6 +2,7 @@
 .build/
 .swiftpm/
 Verto.app/
+build.noindex/
 *.dmg
 *.zip
 

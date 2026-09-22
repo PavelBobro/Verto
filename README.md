@@ -122,11 +122,11 @@ When the two share a writing system (EN↔DE, RU↔UK), Verto falls back to
 ## Tests
 
 ```bash
-make test         # localisation check, then swift test
+make test         # localisation check, then the test suite
 ```
 
-Unlike the build, the tests need Xcode — swift-testing ships with it and not with the
-Command Line Tools.
+No Xcode needed here either: from macOS 27 on, swift-testing ships with the Command
+Line Tools. On older systems it came only with Xcode.
 
 They cover the detector: the threshold cases either side of 15%, each stating its
 share of the second alphabet; the short strings a language model gets wrong; Japanese
