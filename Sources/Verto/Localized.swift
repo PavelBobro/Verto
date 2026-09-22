@@ -87,6 +87,11 @@ enum L {
     static var launchAtLogin: String     { t("settings.launchAtLogin") }
     static var launchFailed: String      { t("settings.launchAtLogin.failed") }
 
+    // Appearance
+    static var appearance: String        { t("settings.appearance") }
+    static var textSize: String          { t("settings.textSize") }
+    static var textSizePreview: String   { t("settings.textSize.preview") }
+
     // Interface language
     static var interfaceLanguage: String { t("settings.language") }
     static var languageSystem: String    { t("settings.language.system") }

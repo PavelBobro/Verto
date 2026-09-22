@@ -54,6 +54,26 @@ struct SettingsView: View {
             }
 
             Section {
+                LabeledContent(L.textSize) {
+                    HStack(spacing: 10) {
+                        Text("A").font(.system(size: 11))
+                        Slider(value: $settings.textSize, in: Settings.textSizes, step: 1)
+                            .frame(width: 180)
+                        Text("A").font(.system(size: 18))
+                    }
+                    .foregroundStyle(.secondary)
+                }
+                // Judged by eye, not by a number: the sample is set exactly as the
+                // popover will set it.
+                Text(L.textSizePreview)
+                    .font(.system(size: settings.textSize))
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .animation(.easeOut(duration: 0.12), value: settings.textSize)
+            } header: {
+                Text(L.appearance)
+            }
+
+            Section {
                 Picker(L.interfaceLanguage, selection: $settings.appLanguage) {
                     ForEach(AppLanguage.allCases, id: \.self) { language in
                         Text(language.title).tag(language)

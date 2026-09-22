@@ -38,6 +38,17 @@ final class Settings: ObservableObject {
     /// Set when the system refuses the combination, which means something else owns it.
     @Published var hotKeyTaken = false
 
+    /// Size of the text being translated and of the translation, in points.
+    /// A single word at the system's 13 pt is easy to lose in a 360-point window.
+    static let textSizes: ClosedRange<Double> = 13...28
+
+    @Published var textSize: Double {
+        didSet {
+            guard textSize != oldValue else { return }
+            UserDefaults.standard.set(textSize, forKey: "textSize")
+        }
+    }
+
     @Published var appLanguage: AppLanguage {
         didSet {
             guard appLanguage != oldValue else { return }
@@ -59,6 +70,8 @@ final class Settings: ObservableObject {
         pair = Self.load(LanguagePair.self, as: .pair) ?? .default
         hotKey = Self.load(HotKeyCombo.self, as: .hotKey) ?? .default
         launchAtLogin = LoginItem.isEnabled
+        let storedSize = UserDefaults.standard.double(forKey: "textSize")
+        textSize = Self.textSizes.contains(storedSize) ? storedSize : Self.textSizes.lowerBound
         appLanguage = UserDefaults.standard.string(forKey: "appLanguage")
             .flatMap(AppLanguage.init(rawValue:)) ?? .system
         L.use(appLanguage)

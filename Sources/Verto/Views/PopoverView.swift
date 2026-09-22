@@ -74,7 +74,7 @@ struct PopoverView: View {
                         .padding(.vertical, 13)
                 } else {
                 TextEditor(text: $model.input)
-                .font(.system(size: 13))
+                .font(.system(size: settings.textSize))
                 .scrollContentBackground(.hidden)
                 .padding(.horizontal, 11)
                 .padding(.vertical, 8)
@@ -247,7 +247,7 @@ struct PopoverView: View {
         case .translated(let text):
             ScrollView {
                 Text(text)
-                    .font(.system(size: 13))
+                    .font(.system(size: settings.textSize))
                     .textSelection(.enabled)
                     .frame(maxWidth: .infinity, alignment: .leading)
             }
@@ -270,7 +270,7 @@ struct PopoverView: View {
 
     private func placeholder(_ text: String) -> some View {
         Text(text)
-            .font(.system(size: 13))
+            .font(.system(size: settings.textSize))
             .foregroundStyle(.tertiary)
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(.horizontal, 15)

@@ -65,3 +65,8 @@
 "capture.recognizing" = "Читаю текст…";
 "capture.nothing"     = "В этой области текста не нашлось. Попробуйте выделить точнее.";
 "menu.capture"        = "Перевести область экрана…";
+
+/* Внешний вид */
+"settings.appearance"         = "Внешний вид";
+"settings.textSize"           = "Размер текста";
+"settings.textSize.preview"   = "Быстрый перевод";

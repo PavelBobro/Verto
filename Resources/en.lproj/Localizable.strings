@@ -65,3 +65,8 @@
 "capture.recognizing" = "Reading the text…";
 "capture.nothing"     = "No text found in that area. Try selecting a tighter crop.";
 "menu.capture"        = "Translate Screen Area…";
+
+/* Appearance */
+"settings.appearance"         = "Appearance";
+"settings.textSize"           = "Text size";
+"settings.textSize.preview"   = "Quick translation";
