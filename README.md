@@ -155,6 +155,15 @@ before you take the translation.
 
 Search in history · faster switching between language pairs.
 
+## Working on it
+
+`AGENTS.md` is the operating manual: commands, toolchain traps, and the conventions
+that hold. `docs/DECISIONS.md` says why things are the way they are, including the
+alternatives that were tried and dropped.
+
+`docs/interface-mockup.html` and `docs/icon-options.html` are the design studies the
+interface and the icon came from — open them in a browser.
+
 ## License
 
 MIT

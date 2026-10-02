@@ -1,0 +1,552 @@
+<title>Verto Icon Options</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500&family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&display=swap">
+
+<style>
+:root{
+  --paper:#EDEFF2; --paper-2:#F6F7F9;
+  --ink:#13161B; --ink-2:#3D4550; --muted:#5C6672;
+  --rule:#D2D8DF; --rule-soft:#E1E6EB;
+  --accent:#0060CC; --warn:#A85B00; --good:#1F7A4D;
+  --serif:"Newsreader",Georgia,serif;
+  --sans:"IBM Plex Sans","Helvetica Neue",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+  --gutter:clamp(20px,5vw,64px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --paper:#101317; --paper-2:#171B21;
+    --ink:#E7EAEE; --ink-2:#B4BCC6; --muted:#8A94A0;
+    --rule:#272D35; --rule-soft:#1E232A;
+    --accent:#4DA3FF; --warn:#E0A055; --good:#5CC08C;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#101317; --paper-2:#171B21;
+  --ink:#E7EAEE; --ink-2:#B4BCC6; --muted:#8A94A0;
+  --rule:#272D35; --rule-soft:#1E232A;
+  --accent:#4DA3FF; --warn:#E0A055; --good:#5CC08C;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);
+  font-family:var(--sans);font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1080px;margin:0 auto;padding:0 var(--gutter)}
+.eyebrow{font-family:var(--mono);font-size:11px;font-weight:500;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--muted);margin:0}
+h1{font-family:var(--serif);font-weight:600;font-size:clamp(34px,5.4vw,58px);
+  line-height:1;letter-spacing:-.02em;margin:14px 0 0;text-wrap:balance}
+h2{font-family:var(--serif);font-weight:600;font-size:clamp(23px,3vw,32px);
+  line-height:1.1;letter-spacing:-.015em;margin:0;text-wrap:balance}
+p{margin:0;max-width:64ch}
+.deck{font-size:17px;color:var(--ink-2);margin-top:18px;max-width:56ch}
+header{padding:clamp(44px,7vw,88px) 0 0}
+section{padding:clamp(52px,7vw,92px) 0 0}
+.sec-head{display:grid;grid-template-columns:minmax(0,7.5rem) minmax(0,1fr);
+  gap:clamp(16px,3vw,40px);align-items:baseline;padding-bottom:28px}
+.idx{font-family:var(--mono);font-size:11px;font-weight:500;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--muted)}
+.sec-head p{margin-top:10px;color:var(--ink-2);font-size:14.5px}
+code{font-family:var(--mono);font-size:.87em;background:var(--rule-soft);
+  padding:.12em .38em;border-radius:4px}
+b{font-weight:500;color:var(--ink)}
+
+/* ── menu bar options ── */
+.opt{display:grid;grid-template-columns:96px minmax(0,1fr) 300px;gap:clamp(16px,3vw,34px);
+  align-items:center;padding:26px 0;border-top:1px solid var(--rule-soft)}
+.opt:first-of-type{border-top:1px solid var(--rule)}
+.big{display:flex;align-items:center;justify-content:center;
+  width:96px;height:96px;border-radius:14px;background:var(--paper-2);
+  box-shadow:inset 0 0 0 1px var(--rule-soft)}
+.big svg{color:var(--ink)}
+.name{font-family:var(--mono);font-size:11px;font-weight:500;letter-spacing:.11em;
+  text-transform:uppercase;color:var(--ink);margin:0 0 7px}
+.verdict{font-size:13.5px;color:var(--ink-2);max-width:46ch}
+.verdict .pro{color:var(--good)}
+.verdict .con{color:var(--warn)}
+.strip{
+  height:26px;border-radius:7px;display:flex;align-items:center;justify-content:flex-end;
+  gap:13px;padding:0 11px;
+  background:linear-gradient(100deg,#16242E 0%,#1D3A4C 55%,#12202B 100%);
+  font-family:-apple-system,"SF Pro Text",sans-serif;font-size:12px;
+  color:rgba(255,255,255,.9);box-shadow:inset 0 0 0 .5px rgba(255,255,255,.12);
+}
+.strip .mark{display:flex;align-items:center;color:rgba(255,255,255,.94)}
+.strip .dim{opacity:.75;display:flex;align-items:center}
+.strip .clock{font-variant-numeric:tabular-nums;opacity:.9}
+.strip.light{
+  background:linear-gradient(100deg,#E8EEF2 0%,#CFDCE4 55%,#DCE6EC 100%);
+  color:rgba(0,0,0,.85);box-shadow:inset 0 0 0 .5px rgba(0,0,0,.10);
+}
+.strip.light .mark{color:rgba(0,0,0,.88)}
+.strips{display:flex;flex-direction:column;gap:9px}
+.strip-note{font-family:var(--mono);font-size:10px;letter-spacing:.06em;
+  text-transform:uppercase;color:var(--muted);margin-bottom:2px}
+@media(max-width:880px){
+  .opt{grid-template-columns:72px minmax(0,1fr);}
+  .opt .verdict-cell{grid-column:1 / -1}
+  .big{width:72px;height:72px}
+}
+
+/* ── app icons ── */
+.apps{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));
+  gap:clamp(18px,3vw,30px)}
+.app{display:flex;flex-direction:column;gap:13px}
+.app-art{display:flex;align-items:flex-end;gap:14px}
+.app .name{margin-bottom:4px}
+.app .verdict{font-size:13px}
+.small-note{font-family:var(--mono);font-size:10px;letter-spacing:.05em;color:var(--muted)}
+
+.rec{margin-top:30px;padding:18px 20px;border-left:2px solid var(--accent);
+  background:var(--paper-2);border-radius:0 9px 9px 0;font-size:14.5px;color:var(--ink-2);max-width:64ch}
+.rec b{color:var(--ink)}
+footer{margin-top:clamp(60px,8vw,110px);padding:24px 0 60px;border-top:1px solid var(--rule)}
+footer p{font-size:13px;color:var(--muted);max-width:60ch}
+</style>
+
+<div class="wrap">
+
+<header>
+  <p class="eyebrow">Verto · иконки · варианты на выбор</p>
+  <h1>Значок для строки меню: три захода до формы, которая выживает</h1>
+  <p class="deck">Каждый значок показан <b>в реальном размере</b> — 18&nbsp;pt на светлой и тёмной полосе меню. Половина красивых идей рассыпается именно здесь, поэтому увеличенная версия ничего не доказывает.</p>
+</header>
+
+<!-- ─────────── MENU BAR ─────────── -->
+<section>
+  <div class="sec-head">
+    <div class="idx">Строка меню</div>
+    <div>
+      <h2>Значок, на который ты смотришь весь день</h2>
+      <p>Требования жёсткие: одноцветный шаблон (macOS красит его сам), читается при 18&nbsp;pt, не путается с иконками системы. Оценки ниже — мои, спорить можно.</p>
+    </div>
+  </div>
+
+  <!-- A -->
+  <div class="opt">
+    <div class="big">
+      <svg width="58" height="58" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h11M11 4l3 3-3 3"/><path d="M17 13H6M9 16l-3-3 3-3"/></svg>
+    </div>
+    <div class="strips">
+      <div class="strip-note">сейчас установлено</div>
+      <div class="strip"><span class="dim">◍</span><span class="mark"><svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h11M11 4l3 3-3 3"/><path d="M17 13H6M9 16l-3-3 3-3"/></svg></span><span class="clock">9:41</span></div>
+      <div class="strip light"><span class="dim">◍</span><span class="mark"><svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h11M11 4l3 3-3 3"/><path d="M17 13H6M9 16l-3-3 3-3"/></svg></span><span class="clock">9:41</span></div>
+    </div>
+    <div class="verdict-cell">
+      <p class="name">A · Две стрелки</p>
+      <p class="verdict"><span class="pro">Читается идеально</span> и говорит «обмен». <span class="con">Но не говорит «перевод»</span> — тем же значком помечают синхронизацию, обмен валют, переключение аудио.</p>
+    </div>
+  </div>
+
+  <!-- B -->
+  <div class="opt">
+    <div class="big">
+      <svg width="58" height="58" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4.2 7.4a6.2 6.2 0 0 1 10.5-1.7"/><path d="M15.8 12.6a6.2 6.2 0 0 1-10.5 1.7"/><path d="M15.4 2.6v3.4h-3.4"/><path d="M4.6 17.4V14h3.4"/></svg>
+    </div>
+    <div class="strips">
+      <div class="strip"><span class="dim">◍</span><span class="mark"><svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4.2 7.4a6.2 6.2 0 0 1 10.5-1.7"/><path d="M15.8 12.6a6.2 6.2 0 0 1-10.5 1.7"/><path d="M15.4 2.6v3.4h-3.4"/><path d="M4.6 17.4V14h3.4"/></svg></span><span class="clock">9:41</span></div>
+      <div class="strip light"><span class="dim">◍</span><span class="mark"><svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4.2 7.4a6.2 6.2 0 0 1 10.5-1.7"/><path d="M15.8 12.6a6.2 6.2 0 0 1-10.5 1.7"/><path d="M15.4 2.6v3.4h-3.4"/><path d="M4.6 17.4V14h3.4"/></svg></span><span class="clock">9:41</span></div>
+    </div>
+    <div class="verdict-cell">
+      <p class="name">B · Кольцевой разворот</p>
+      <p class="verdict">Прямая отсылка к смыслу имени — <i>verto</i>, «поворачиваю». <span class="con">Но это же значок «обновить»</span> в половине приложений мира. Риск, что глаз прочитает «синхронизация».</p>
+    </div>
+  </div>
+
+  <!-- C -->
+  <div class="opt">
+    <div class="big">
+      <svg width="58" height="58" viewBox="0 0 20 20"><text x="10" y="14.6" text-anchor="middle" font-family="-apple-system,'SF Pro Text',sans-serif" font-size="13.5" font-weight="600" fill="currentColor" letter-spacing="-.3">Aя</text></svg>
+    </div>
+    <div class="strips">
+      <div class="strip"><span class="dim">◍</span><span class="mark"><svg width="18" height="18" viewBox="0 0 20 20"><text x="10" y="14.6" text-anchor="middle" font-family="-apple-system,'SF Pro Text',sans-serif" font-size="13.5" font-weight="600" fill="currentColor" letter-spacing="-.3">Aя</text></svg></span><span class="clock">9:41</span></div>
+      <div class="strip light"><span class="dim">◍</span><span class="mark"><svg width="18" height="18" viewBox="0 0 20 20"><text x="10" y="14.6" text-anchor="middle" font-family="-apple-system,'SF Pro Text',sans-serif" font-size="13.5" font-weight="600" fill="currentColor" letter-spacing="-.3">Aя</text></svg></span><span class="clock">9:41</span></div>
+    </div>
+    <div class="verdict-cell">
+      <p class="name">C · Буквенная пара «Aя»</p>
+      <p class="verdict"><span class="pro">Единственный вариант, который говорит, что это переводчик и какие языки.</span> Приём Apple: в Переводчике стоит «文A». <span class="con">Привязан к паре RU⇄EN</span> — при смене пары либо врёт, либо должен перерисовываться.</p>
+    </div>
+  </div>
+
+  <!-- D -->
+  <div class="opt">
+    <div class="big">
+      <svg width="58" height="58" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4.5 10 15.5 16 4.5"/><path d="M6.6 11.2H3.2M13.4 11.2h3.4" opacity=".45"/></svg>
+    </div>
+    <div class="strips">
+      <div class="strip"><span class="dim">◍</span><span class="mark"><svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4.5 10 15.5 16 4.5"/><path d="M6.6 11.2H3.2M13.4 11.2h3.4" opacity=".45"/></svg></span><span class="clock">9:41</span></div>
+      <div class="strip light"><span class="dim">◍</span><span class="mark"><svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4.5 10 15.5 16 4.5"/><path d="M6.6 11.2H3.2M13.4 11.2h3.4" opacity=".45"/></svg></span><span class="clock">9:41</span></div>
+    </div>
+    <div class="verdict-cell">
+      <p class="name">D · Монограмма V</p>
+      <p class="verdict">Своя, ни на что не похожая марка — и она же на иконке приложения. <span class="con">Но ничего не сообщает о функции</span>: пока не запомнишь, значок бессмысленный. Годится, если делать бренд.</p>
+    </div>
+  </div>
+
+  <!-- E -->
+  <div class="opt">
+    <div class="big">
+      <svg width="58" height="58" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M17 9.4c0 3.2-3.1 5.8-7 5.8-.9 0-1.7-.1-2.5-.4L3.4 16.4l1-2.9A5.4 5.4 0 0 1 3 9.4C3 6.2 6.1 3.6 10 3.6s7 2.6 7 5.8Z"/><path d="M7 8.2h5.4M11 6.6l1.6 1.6-1.6 1.6" stroke-width="1.3"/><path d="M13 11.4H7.6" stroke-width="1.3"/></svg>
+    </div>
+    <div class="strips">
+      <div class="strip"><span class="dim">◍</span><span class="mark"><svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M17 9.4c0 3.2-3.1 5.8-7 5.8-.9 0-1.7-.1-2.5-.4L3.4 16.4l1-2.9A5.4 5.4 0 0 1 3 9.4C3 6.2 6.1 3.6 10 3.6s7 2.6 7 5.8Z"/><path d="M7 8.2h5.4M11 6.6l1.6 1.6-1.6 1.6" stroke-width="1.3"/><path d="M13 11.4H7.6" stroke-width="1.3"/></svg></span><span class="clock">9:41</span></div>
+      <div class="strip light"><span class="dim">◍</span><span class="mark"><svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M17 9.4c0 3.2-3.1 5.8-7 5.8-.9 0-1.7-.1-2.5-.4L3.4 16.4l1-2.9A5.4 5.4 0 0 1 3 9.4C3 6.2 6.1 3.6 10 3.6s7 2.6 7 5.8Z"/><path d="M7 8.2h5.4M11 6.6l1.6 1.6-1.6 1.6" stroke-width="1.3"/><path d="M13 11.4H7.6" stroke-width="1.3"/></svg></span><span class="clock">9:41</span></div>
+    </div>
+    <div class="verdict-cell">
+      <p class="name">E · Пузырь со стрелками</p>
+      <p class="verdict">Говорит «язык» и «обмен» сразу. <span class="con">Разваливается при 18&nbsp;pt</span> — посмотри на полосу: стрелки внутри пузыря слиплись в кашу. Это ровно тот случай, ради которого сделан этот раздел.</p>
+    </div>
+  </div>
+
+  <!-- F -->
+  <div class="opt">
+    <div class="big">
+      <svg width="58" height="58" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M7.6 5 3.4 10l4.2 5"/><path d="M12.4 5l4.2 5-4.2 5"/></svg>
+    </div>
+    <div class="strips">
+      <div class="strip"><span class="dim">◍</span><span class="mark"><svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M7.6 5 3.4 10l4.2 5"/><path d="M12.4 5l4.2 5-4.2 5"/></svg></span><span class="clock">9:41</span></div>
+      <div class="strip light"><span class="dim">◍</span><span class="mark"><svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M7.6 5 3.4 10l4.2 5"/><path d="M12.4 5l4.2 5-4.2 5"/></svg></span><span class="clock">9:41</span></div>
+    </div>
+    <div class="verdict-cell">
+      <p class="name">F · Два шеврона</p>
+      <p class="verdict">Предельно чисто, отлично держится в мелком размере. <span class="con">Читается как «свернуть/развернуть»</span> — жест интерфейса, а не приложение.</p>
+    </div>
+  </div>
+
+  <div class="rec">
+    <b>Моя рекомендация — C «Aя».</b> Это единственный вариант, который отвечает на вопрос «что это за иконка» без объяснений, и у приёма есть прямой прецедент у Apple. Привязка к паре языков решается просто: значок <b>перерисовывается под выбранную пару</b> — выбрал DE⇄EN, в меню стало «Aä». Работы на полчаса, зато иконка всегда говорит правду.<br><br>
+    Если хочется бренд, а не указатель, — берём <b>D</b> и ставим ту же V на иконку приложения.
+  </div>
+</section>
+
+
+<!-- ─────────── V + TRANSLATE MARK ─────────── -->
+<section>
+  <div class="sec-head">
+    <div class="idx">Второй заход</div>
+    <div>
+      <h2>V со знаком перевода</h2>
+      <p>Задача: монограмма V плюс узнаваемый знак перевода позади неё. Ограничение честное — <b>при 18&nbsp;pt два наложенных символа превращаются в грязь</b>. Знак Google (две карточки с «文» и «A») живёт в размере иконки приложения; в строке меню его не ставит даже Google. Поэтому ниже не наложение, а сращивание.</p>
+    </div>
+  </div>
+
+  <div class="opt">
+    <div class="big">
+      <svg width="58" height="58" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="2.6" y="3.6" width="14.8" height="12.8" rx="3.2" stroke-width="1.25"/>
+        <path d="M6.7 7.4 10 13.1l3.3-5.7" stroke-width="1.7"/>
+      </svg>
+    </div>
+    <div class="strips">
+      <div class="strip"><span class="dim">◍</span><span class="mark"><svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="2.6" y="3.6" width="14.8" height="12.8" rx="3.2" stroke-width="1.25"/><path d="M6.7 7.4 10 13.1l3.3-5.7" stroke-width="1.7"/></svg></span><span class="clock">9:41</span></div>
+      <div class="strip light"><span class="dim">◍</span><span class="mark"><svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="2.6" y="3.6" width="14.8" height="12.8" rx="3.2" stroke-width="1.25"/><path d="M6.7 7.4 10 13.1l3.3-5.7" stroke-width="1.7"/></svg></span><span class="clock">9:41</span></div>
+    </div>
+    <div class="verdict-cell">
+      <p class="name">G · V в карточке</p>
+      <p class="verdict">Карточка — половина гугловского приёма, только одна. <span class="con">V зажата рамкой</span> и теряет размер: буква получается вдвое мельче, чем могла бы, и в полосе почти не читается.</p>
+    </div>
+  </div>
+
+  <div class="opt">
+    <div class="big">
+      <svg width="58" height="58" viewBox="0 0 20 20">
+        <rect x="6.4" y="2.4" width="11.2" height="10" rx="2.4" fill="none" stroke="currentColor" stroke-width="1.2" opacity=".55"/>
+        <path fill="currentColor" fill-rule="evenodd" d="M2.4 7.6h11.2v10H2.4zm0 2.4a2.4 2.4 0 0 1 2.4-2.4h6.4a2.4 2.4 0 0 1 2.4 2.4v5.2a2.4 2.4 0 0 1-2.4 2.4H4.8a2.4 2.4 0 0 1-2.4-2.4z"/>
+        <path d="M5.6 10.2 8 15l2.4-4.8" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <div class="strips">
+      <div class="strip"><span class="dim">◍</span><span class="mark"><svg width="18" height="18" viewBox="0 0 20 20"><rect x="6.4" y="2.4" width="11.2" height="10" rx="2.4" fill="none" stroke="currentColor" stroke-width="1.2" opacity=".55"/><path fill="currentColor" fill-rule="evenodd" d="M2.4 7.6h11.2v10H2.4zm0 2.4a2.4 2.4 0 0 1 2.4-2.4h6.4a2.4 2.4 0 0 1 2.4 2.4v5.2a2.4 2.4 0 0 1-2.4 2.4H4.8a2.4 2.4 0 0 1-2.4-2.4z"/><path d="M5.6 10.2 8 15l2.4-4.8" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="clock">9:41</span></div>
+      <div class="strip light"><span class="dim">◍</span><span class="mark"><svg width="18" height="18" viewBox="0 0 20 20"><rect x="6.4" y="2.4" width="11.2" height="10" rx="2.4" fill="none" stroke="currentColor" stroke-width="1.2" opacity=".55"/><path fill="currentColor" fill-rule="evenodd" d="M2.4 7.6h11.2v10H2.4zm0 2.4a2.4 2.4 0 0 1 2.4-2.4h6.4a2.4 2.4 0 0 1 2.4 2.4v5.2a2.4 2.4 0 0 1-2.4 2.4H4.8a2.4 2.4 0 0 1-2.4-2.4z"/><path d="M5.6 10.2 8 15l2.4-4.8" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="clock">9:41</span></div>
+    </div>
+    <div class="verdict-cell">
+      <p class="name">H · Две карточки, как у Google</p>
+      <p class="verdict">Буквальное исполнение просьбы: задняя карточка, передняя, V на ней. <span class="con">И вот доказательство проблемы</span> — посмотри на полосу. В большом виде композиция читается, в рабочем размере это серое пятно.</p>
+    </div>
+  </div>
+
+  <div class="opt">
+    <div class="big">
+      <svg width="58" height="58" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M4.4 4.8 10 15.2l5.6-10.4"/>
+        <path d="M4.4 9.1 4.4 4.8l4.3 0" opacity=".5"/>
+        <path d="M15.6 9.1V4.8h-4.3" opacity=".5"/>
+      </svg>
+    </div>
+    <div class="strips">
+      <div class="strip"><span class="dim">◍</span><span class="mark"><svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4.4 4.8 10 15.2l5.6-10.4"/><path d="M4.4 9.1 4.4 4.8l4.3 0" opacity=".5"/><path d="M15.6 9.1V4.8h-4.3" opacity=".5"/></svg></span><span class="clock">9:41</span></div>
+      <div class="strip light"><span class="dim">◍</span><span class="mark"><svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4.4 4.8 10 15.2l5.6-10.4"/><path d="M4.4 9.1 4.4 4.8l4.3 0" opacity=".5"/><path d="M15.6 9.1V4.8h-4.3" opacity=".5"/></svg></span><span class="clock">9:41</span></div>
+    </div>
+    <div class="verdict-cell">
+      <p class="name">I · V из двух стрелок</p>
+      <p class="verdict">Не наложение, а сращивание: штрихи буквы <b>сами</b> заканчиваются стрелками, направленными наружу. <span class="pro">Читается и как V, и как обмен</span>, ничего лишнего.</p>
+    </div>
+  </div>
+
+  <div class="opt">
+    <div class="big">
+      <svg width="58" height="58" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M17.2 9.1c0 3.1-3.2 5.6-7.2 5.6-.8 0-1.6-.1-2.3-.3l-3.9 1.8 1-2.8a5.2 5.2 0 0 1-1.6-3.6C3.2 6 6.4 3.5 10.4 3.5s6.8 2.5 6.8 5.6Z" stroke-width="1.2"/>
+        <path d="M7.6 6.9 10.2 11.5l2.6-4.6" stroke-width="1.6"/>
+      </svg>
+    </div>
+    <div class="strips">
+      <div class="strip"><span class="dim">◍</span><span class="mark"><svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M17.2 9.1c0 3.1-3.2 5.6-7.2 5.6-.8 0-1.6-.1-2.3-.3l-3.9 1.8 1-2.8a5.2 5.2 0 0 1-1.6-3.6C3.2 6 6.4 3.5 10.4 3.5s6.8 2.5 6.8 5.6Z" stroke-width="1.2"/><path d="M7.6 6.9 10.2 11.5l2.6-4.6" stroke-width="1.6"/></svg></span><span class="clock">9:41</span></div>
+      <div class="strip light"><span class="dim">◍</span><span class="mark"><svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M17.2 9.1c0 3.1-3.2 5.6-7.2 5.6-.8 0-1.6-.1-2.3-.3l-3.9 1.8 1-2.8a5.2 5.2 0 0 1-1.6-3.6C3.2 6 6.4 3.5 10.4 3.5s6.8 2.5 6.8 5.6Z" stroke-width="1.2"/><path d="M7.6 6.9 10.2 11.5l2.6-4.6" stroke-width="1.6"/></svg></span><span class="clock">9:41</span></div>
+    </div>
+    <div class="verdict-cell">
+      <p class="name">J · V в речевом пузыре</p>
+      <p class="verdict">Пузырь — самый узнаваемый знак «языка». <span class="con">Хвостик пузыря съедается</span> в мелком размере, и остаётся просто овал вокруг буквы.</p>
+    </div>
+  </div>
+
+  <div class="opt">
+    <div class="big">
+      <svg width="58" height="58" viewBox="0 0 20 20">
+        <path fill="currentColor" fill-rule="evenodd" d="M4.6 2.4h10.8a3.4 3.4 0 0 1 3.4 3.4v8.4a3.4 3.4 0 0 1-3.4 3.4H4.6a3.4 3.4 0 0 1-3.4-3.4V5.8a3.4 3.4 0 0 1 3.4-3.4Zm1.1 4 4.3 8.2 4.3-8.2h-2.2L10 10.8 8.1 6.4H5.7Z"/>
+      </svg>
+    </div>
+    <div class="strips">
+      <div class="strip"><span class="dim">◍</span><span class="mark"><svg width="18" height="18" viewBox="0 0 20 20"><path fill="currentColor" fill-rule="evenodd" d="M4.6 2.4h10.8a3.4 3.4 0 0 1 3.4 3.4v8.4a3.4 3.4 0 0 1-3.4 3.4H4.6a3.4 3.4 0 0 1-3.4-3.4V5.8a3.4 3.4 0 0 1 3.4-3.4Zm1.1 4 4.3 8.2 4.3-8.2h-2.2L10 10.8 8.1 6.4H5.7Z"/></svg></span><span class="clock">9:41</span></div>
+      <div class="strip light"><span class="dim">◍</span><span class="mark"><svg width="18" height="18" viewBox="0 0 20 20"><path fill="currentColor" fill-rule="evenodd" d="M4.6 2.4h10.8a3.4 3.4 0 0 1 3.4 3.4v8.4a3.4 3.4 0 0 1-3.4 3.4H4.6a3.4 3.4 0 0 1-3.4-3.4V5.8a3.4 3.4 0 0 1 3.4-3.4Zm1.1 4 4.3 8.2 4.3-8.2h-2.2L10 10.8 8.1 6.4H5.7Z"/></svg></span><span class="clock">9:41</span></div>
+    </div>
+    <div class="verdict-cell">
+      <p class="name">K · Плашка с вырезанной V</p>
+      <p class="verdict"><span class="pro">Уменьшенная копия выбранной иконки приложения.</span> Сплошная форма в мелком размере всегда сильнее контура, а буква вырезана насквозь и не может слипнуться. Меню и Finder показывают одну и ту же марку.</p>
+    </div>
+  </div>
+
+  <div class="rec">
+    <b>Что показала полоса.</b> Гугловский приём в буквальном виде (H) не работает — сравни большой рисунок и рабочий размер. Зато два варианта решают задачу иначе: <b>I</b> сращивает букву со стрелками, так что знак обмена и есть буква; <b>K</b> берёт выбранную тобой иконку приложения и делает из неё марку для меню — одна форма в Finder, в строке меню и на GitHub.<br><br>
+    <b>Я бы взял K.</b> Ты выбрал монограмму как бренд — тогда бренд должен быть один и тот же везде, а не буква в одном месте и стрелки в другом. Если хочется, чтобы значок всё же намекал на функцию, — <b>I</b>.
+  </div>
+</section>
+
+
+<!-- ─────────── BUBBLE ROUND ─────────── -->
+<section>
+  <div class="sec-head">
+    <div class="idx">Третий заход</div>
+    <div>
+      <h2>Пузырь: последний круг</h2>
+      <p>Направление выбрано — V в речевом пузыре. Осталась одна поломка: <b>тонкий хвост съедается при 18&nbsp;pt</b>, и пузырь превращается в овал. Ниже пять способов её починить, сверху — исходный вариант J для сравнения на той же полосе.</p>
+    </div>
+  </div>
+
+  <div class="opt">
+    <div class="big"><svg width="58" height="58" viewBox="0 0 20 20"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M17.2 9.1c0 3.1-3.2 5.6-7.2 5.6-.8 0-1.6-.1-2.3-.3l-3.9 1.8 1-2.8a5.2 5.2 0 0 1-1.6-3.6C3.2 6 6.4 3.5 10.4 3.5s6.8 2.5 6.8 5.6Z" stroke-width="1.2"/><path d="M7.6 6.9 10.2 11.5l2.6-4.6" stroke-width="1.6"/></g></svg></div>
+    <div class="strips">
+      <div class="strip-note">было</div>
+      <div class="strip"><span class="dim">◍</span><span class="mark"><svg width="18" height="18" viewBox="0 0 20 20"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M17.2 9.1c0 3.1-3.2 5.6-7.2 5.6-.8 0-1.6-.1-2.3-.3l-3.9 1.8 1-2.8a5.2 5.2 0 0 1-1.6-3.6C3.2 6 6.4 3.5 10.4 3.5s6.8 2.5 6.8 5.6Z" stroke-width="1.2"/><path d="M7.6 6.9 10.2 11.5l2.6-4.6" stroke-width="1.6"/></g></svg></span><span class="clock">9:41</span></div>
+      <div class="strip light"><span class="dim">◍</span><span class="mark"><svg width="18" height="18" viewBox="0 0 20 20"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M17.2 9.1c0 3.1-3.2 5.6-7.2 5.6-.8 0-1.6-.1-2.3-.3l-3.9 1.8 1-2.8a5.2 5.2 0 0 1-1.6-3.6C3.2 6 6.4 3.5 10.4 3.5s6.8 2.5 6.8 5.6Z" stroke-width="1.2"/><path d="M7.6 6.9 10.2 11.5l2.6-4.6" stroke-width="1.6"/></g></svg></span><span class="clock">9:41</span></div>
+    </div>
+    <div class="verdict-cell">
+      <p class="name">J · Исходный (текущий фаворит)</p>
+      <p class="verdict">Контур тонкий, хвост длинный и острый. <span class="con">На полосе хвоста практически нет</span> — сравни с вариантами ниже.</p>
+    </div>
+  </div>
+  <div class="opt">
+    <div class="big"><svg width="58" height="58" viewBox="0 0 20 20"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.45"><path d="M10 3.2c4 0 6.9 2.5 6.9 5.6 0 3.1-2.9 5.6-6.9 5.6h-.7l-3.1 2.5.5-2.9C4.4 13.1 3.1 11.1 3.1 8.8c0-3.1 2.9-5.6 6.9-5.6Z"/><path d="M7.5 6.9 10 11.2l2.5-4.3" stroke-width="1.7"/></g></svg></div>
+    <div class="strips">
+      
+      <div class="strip"><span class="dim">◍</span><span class="mark"><svg width="18" height="18" viewBox="0 0 20 20"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.45"><path d="M10 3.2c4 0 6.9 2.5 6.9 5.6 0 3.1-2.9 5.6-6.9 5.6h-.7l-3.1 2.5.5-2.9C4.4 13.1 3.1 11.1 3.1 8.8c0-3.1 2.9-5.6 6.9-5.6Z"/><path d="M7.5 6.9 10 11.2l2.5-4.3" stroke-width="1.7"/></g></svg></span><span class="clock">9:41</span></div>
+      <div class="strip light"><span class="dim">◍</span><span class="mark"><svg width="18" height="18" viewBox="0 0 20 20"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.45"><path d="M10 3.2c4 0 6.9 2.5 6.9 5.6 0 3.1-2.9 5.6-6.9 5.6h-.7l-3.1 2.5.5-2.9C4.4 13.1 3.1 11.1 3.1 8.8c0-3.1 2.9-5.6 6.9-5.6Z"/><path d="M7.5 6.9 10 11.2l2.5-4.3" stroke-width="1.7"/></g></svg></span><span class="clock">9:41</span></div>
+    </div>
+    <div class="verdict-cell">
+      <p class="name">L1 · Хвост короче и толще</p>
+      <p class="verdict">Тот же контур, но линия толще, а хвост укорочен и придвинут к телу. <span class="pro">Хвост выживает</span>, форма остаётся лёгкой.</p>
+    </div>
+  </div>
+  <div class="opt">
+    <div class="big"><svg width="58" height="58" viewBox="0 0 20 20"><path fill="currentColor" fill-rule="evenodd" d="M6.4 2.6h7.2A4.4 4.4 0 0 1 18 7v2.8a4.4 4.4 0 0 1-4.4 4.4H9.1l-3.6 3.3.5-3.4A4.4 4.4 0 0 1 2 9.8V7a4.4 4.4 0 0 1 4.4-4.4Zm.3 3.6 2.4 5.6h1.6l2.4-5.6h-1.9L10 9.4 8.6 6.2H6.7Z"/></svg></div>
+    <div class="strips">
+      
+      <div class="strip"><span class="dim">◍</span><span class="mark"><svg width="18" height="18" viewBox="0 0 20 20"><path fill="currentColor" fill-rule="evenodd" d="M6.4 2.6h7.2A4.4 4.4 0 0 1 18 7v2.8a4.4 4.4 0 0 1-4.4 4.4H9.1l-3.6 3.3.5-3.4A4.4 4.4 0 0 1 2 9.8V7a4.4 4.4 0 0 1 4.4-4.4Zm.3 3.6 2.4 5.6h1.6l2.4-5.6h-1.9L10 9.4 8.6 6.2H6.7Z"/></svg></span><span class="clock">9:41</span></div>
+      <div class="strip light"><span class="dim">◍</span><span class="mark"><svg width="18" height="18" viewBox="0 0 20 20"><path fill="currentColor" fill-rule="evenodd" d="M6.4 2.6h7.2A4.4 4.4 0 0 1 18 7v2.8a4.4 4.4 0 0 1-4.4 4.4H9.1l-3.6 3.3.5-3.4A4.4 4.4 0 0 1 2 9.8V7a4.4 4.4 0 0 1 4.4-4.4Zm.3 3.6 2.4 5.6h1.6l2.4-5.6h-1.9L10 9.4 8.6 6.2H6.7Z"/></svg></span><span class="clock">9:41</span></div>
+    </div>
+    <div class="verdict-cell">
+      <p class="name">L2 · Сплошной пузырь, V вырезана</p>
+      <p class="verdict">Заливка вместо контура. <span class="pro">Самая читаемая форма из всех</span> — сплошное пятно в мелком размере всегда сильнее линии, а буква вырезана насквозь и слипнуться не может.</p>
+    </div>
+  </div>
+  <div class="opt">
+    <div class="big"><svg width="58" height="58" viewBox="0 0 20 20"><path fill="currentColor" fill-rule="evenodd" d="M6.2 2.8h7.6A4.2 4.2 0 0 1 18 7v3a4.2 4.2 0 0 1-4.2 4.2h-2.5L10 17.6l-1.3-3.4H6.2A4.2 4.2 0 0 1 2 10V7a4.2 4.2 0 0 1 4.2-4.2Zm.5 3.5 2.4 5.5h1.8l2.4-5.5h-1.9L10 9.5 8.6 6.3H6.7Z"/></svg></div>
+    <div class="strips">
+      
+      <div class="strip"><span class="dim">◍</span><span class="mark"><svg width="18" height="18" viewBox="0 0 20 20"><path fill="currentColor" fill-rule="evenodd" d="M6.2 2.8h7.6A4.2 4.2 0 0 1 18 7v3a4.2 4.2 0 0 1-4.2 4.2h-2.5L10 17.6l-1.3-3.4H6.2A4.2 4.2 0 0 1 2 10V7a4.2 4.2 0 0 1 4.2-4.2Zm.5 3.5 2.4 5.5h1.8l2.4-5.5h-1.9L10 9.5 8.6 6.3H6.7Z"/></svg></span><span class="clock">9:41</span></div>
+      <div class="strip light"><span class="dim">◍</span><span class="mark"><svg width="18" height="18" viewBox="0 0 20 20"><path fill="currentColor" fill-rule="evenodd" d="M6.2 2.8h7.6A4.2 4.2 0 0 1 18 7v3a4.2 4.2 0 0 1-4.2 4.2h-2.5L10 17.6l-1.3-3.4H6.2A4.2 4.2 0 0 1 2 10V7a4.2 4.2 0 0 1 4.2-4.2Zm.5 3.5 2.4 5.5h1.8l2.4-5.5h-1.9L10 9.5 8.6 6.3H6.7Z"/></svg></span><span class="clock">9:41</span></div>
+    </div>
+    <div class="verdict-cell">
+      <p class="name">L3 · Хвост под остриём V</p>
+      <p class="verdict">Хвост перенесён из угла в центр — точно под вершину буквы. <span class="pro">V и хвост читаются как один жест</span>, одна вертикальная ось вместо двух разнонаправленных деталей.</p>
+    </div>
+  </div>
+  <div class="opt">
+    <div class="big"><svg width="58" height="58" viewBox="0 0 20 20"><g><path d="M8.4 2.2h7.2A3.6 3.6 0 0 1 19.2 5.8v2.4a3.6 3.6 0 0 1-3.6 3.6h-.6l-2.6 2.2.4-2.2H8.4A3.6 3.6 0 0 1 4.8 8.2V5.8a3.6 3.6 0 0 1 3.6-3.6Z" fill="none" stroke="currentColor" stroke-width="1.2" opacity=".45" stroke-linejoin="round"/><path fill="currentColor" fill-rule="evenodd" d="M4.2 6.6h7.2a3.7 3.7 0 0 1 3.7 3.7v2.1a3.7 3.7 0 0 1-3.7 3.7H7.3l-3 2.7.4-2.8a3.7 3.7 0 0 1-3.2-3.6v-2.1a3.7 3.7 0 0 1 3.7-3.7Zm.5 3 2 4.6h1.5l2-4.6H8.6l-1 2.6-1-2.6H4.7Z"/></g></svg></div>
+    <div class="strips">
+      
+      <div class="strip"><span class="dim">◍</span><span class="mark"><svg width="18" height="18" viewBox="0 0 20 20"><g><path d="M8.4 2.2h7.2A3.6 3.6 0 0 1 19.2 5.8v2.4a3.6 3.6 0 0 1-3.6 3.6h-.6l-2.6 2.2.4-2.2H8.4A3.6 3.6 0 0 1 4.8 8.2V5.8a3.6 3.6 0 0 1 3.6-3.6Z" fill="none" stroke="currentColor" stroke-width="1.2" opacity=".45" stroke-linejoin="round"/><path fill="currentColor" fill-rule="evenodd" d="M4.2 6.6h7.2a3.7 3.7 0 0 1 3.7 3.7v2.1a3.7 3.7 0 0 1-3.7 3.7H7.3l-3 2.7.4-2.8a3.7 3.7 0 0 1-3.2-3.6v-2.1a3.7 3.7 0 0 1 3.7-3.7Zm.5 3 2 4.6h1.5l2-4.6H8.6l-1 2.6-1-2.6H4.7Z"/></g></svg></span><span class="clock">9:41</span></div>
+      <div class="strip light"><span class="dim">◍</span><span class="mark"><svg width="18" height="18" viewBox="0 0 20 20"><g><path d="M8.4 2.2h7.2A3.6 3.6 0 0 1 19.2 5.8v2.4a3.6 3.6 0 0 1-3.6 3.6h-.6l-2.6 2.2.4-2.2H8.4A3.6 3.6 0 0 1 4.8 8.2V5.8a3.6 3.6 0 0 1 3.6-3.6Z" fill="none" stroke="currentColor" stroke-width="1.2" opacity=".45" stroke-linejoin="round"/><path fill="currentColor" fill-rule="evenodd" d="M4.2 6.6h7.2a3.7 3.7 0 0 1 3.7 3.7v2.1a3.7 3.7 0 0 1-3.7 3.7H7.3l-3 2.7.4-2.8a3.7 3.7 0 0 1-3.2-3.6v-2.1a3.7 3.7 0 0 1 3.7-3.7Zm.5 3 2 4.6h1.5l2-4.6H8.6l-1 2.6-1-2.6H4.7Z"/></g></svg></span><span class="clock">9:41</span></div>
+    </div>
+    <div class="verdict-cell">
+      <p class="name">L4 · Два пузыря</p>
+      <p class="verdict">Разговор двух сторон — самая честная метафора перевода. <span class="con">Но это снова наложение</span>: задний пузырь на полосе превращается в шум вокруг переднего.</p>
+    </div>
+  </div>
+  <div class="opt">
+    <div class="big"><svg width="58" height="58" viewBox="0 0 20 20"><path fill="currentColor" fill-rule="evenodd" d="M3.6 3h12.8a2 2 0 0 1 2 2v7.4a2 2 0 0 1-2 2h-4.9L7.8 17.6l.5-3.2H3.6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Zm2.7 3.4 2.5 5.6h1.6l2.5-5.6h-1.9L10 9.6 8.2 6.4H6.3Z"/></svg></div>
+    <div class="strips">
+      
+      <div class="strip"><span class="dim">◍</span><span class="mark"><svg width="18" height="18" viewBox="0 0 20 20"><path fill="currentColor" fill-rule="evenodd" d="M3.6 3h12.8a2 2 0 0 1 2 2v7.4a2 2 0 0 1-2 2h-4.9L7.8 17.6l.5-3.2H3.6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Zm2.7 3.4 2.5 5.6h1.6l2.5-5.6h-1.9L10 9.6 8.2 6.4H6.3Z"/></svg></span><span class="clock">9:41</span></div>
+      <div class="strip light"><span class="dim">◍</span><span class="mark"><svg width="18" height="18" viewBox="0 0 20 20"><path fill="currentColor" fill-rule="evenodd" d="M3.6 3h12.8a2 2 0 0 1 2 2v7.4a2 2 0 0 1-2 2h-4.9L7.8 17.6l.5-3.2H3.6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Zm2.7 3.4 2.5 5.6h1.6l2.5-5.6h-1.9L10 9.6 8.2 6.4H6.3Z"/></svg></span><span class="clock">9:41</span></div>
+    </div>
+    <div class="verdict-cell">
+      <p class="name">L5 · Прямоугольный пузырь</p>
+      <p class="verdict">Карточка с хвостом — гугловский приём и пузырь в одной форме. <span class="con">Углы делают её похожей на значок заметок</span> или мессенджера.</p>
+    </div>
+  </div>
+
+  <div class="rec">
+    <b>Из этой пятёрки работают L2 и L3.</b> Оба сплошные, и это главное: при 18&nbsp;pt заливка бьёт контур всегда. L2 — классический пузырь с хвостом в углу. <b>L3 я бы поставил первым</b>: хвост перенесён под вершину V, и буква с хвостом читаются как одна фигура, а не как буква плюс деталь.<br><br>
+    <b>L1</b> — компромисс, если хочется сохранить лёгкость контура. <b>L4 и L5</b> показывают, где границы: наложение снова не выжило, а прямые углы уводят значок в сторону мессенджера.
+  </div>
+</section>
+
+<!-- ─────────── APP ICON ─────────── -->
+<section>
+  <div class="sec-head">
+    <div class="idx">Иконка</div>
+    <div>
+      <h2>Иконка приложения</h2>
+      <p>В Dock она не появится — приложение живёт в строке меню. Но её видно в Finder, в окне установки, в списке автозапуска и на странице GitHub. Показана при 128&nbsp;px и при 32&nbsp;px, потому что в Finder-списке она будет именно такой.</p>
+    </div>
+  </div>
+
+  <div class="apps">
+
+    <div class="app">
+      <div class="app-art">
+        <svg width="128" height="128" viewBox="0 0 128 128">
+          <defs>
+            <linearGradient id="g1" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#4DA6FF"/><stop offset="1" stop-color="#0059C9"/>
+            </linearGradient>
+            <linearGradient id="s1" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#fff" stop-opacity=".45"/><stop offset=".5" stop-color="#fff" stop-opacity="0"/>
+            </linearGradient>
+          </defs>
+          <rect x="6" y="6" width="116" height="116" rx="27" fill="url(#g1)"/>
+          <rect x="6" y="6" width="116" height="116" rx="27" fill="url(#s1)"/>
+          <rect x="6.5" y="6.5" width="115" height="115" rx="26.5" fill="none" stroke="#fff" stroke-opacity=".35"/>
+          <g fill="none" stroke="#fff" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M38 46h38M68 36l10 10-10 10"/><path d="M90 82H52M62 72 52 82l10 10"/>
+          </g>
+        </svg>
+        <svg width="32" height="32" viewBox="0 0 128 128">
+          <rect x="6" y="6" width="116" height="116" rx="27" fill="url(#g1)"/>
+          <g fill="none" stroke="#fff" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M38 46h38M68 36l10 10-10 10"/><path d="M90 82H52M62 72 52 82l10 10"/>
+          </g>
+        </svg>
+      </div>
+      <div>
+        <p class="name">1 · Стрелки на синем</p>
+        <p class="verdict">Системный синий Apple, форма совпадает со значком в меню. Спокойно и узнаваемо. <span class="con">Похоже на десяток утилит обмена.</span></p>
+      </div>
+    </div>
+
+    <div class="app">
+      <div class="app-art">
+        <svg width="128" height="128" viewBox="0 0 128 128">
+          <defs>
+            <linearGradient id="g2" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#1B3A5C"/><stop offset=".55" stop-color="#0E6B78"/><stop offset="1" stop-color="#0A2A3C"/>
+            </linearGradient>
+          </defs>
+          <rect x="6" y="6" width="116" height="116" rx="27" fill="url(#g2)"/>
+          <rect x="6" y="6" width="116" height="116" rx="27" fill="url(#s1)"/>
+          <rect x="6.5" y="6.5" width="115" height="115" rx="26.5" fill="none" stroke="#fff" stroke-opacity=".3"/>
+          <text x="64" y="86" text-anchor="middle" font-family="-apple-system,'SF Pro Display',sans-serif"
+                font-size="58" font-weight="600" fill="#fff" letter-spacing="-2">Aя</text>
+        </svg>
+        <svg width="32" height="32" viewBox="0 0 128 128">
+          <rect x="6" y="6" width="116" height="116" rx="27" fill="url(#g2)"/>
+          <text x="64" y="86" text-anchor="middle" font-family="-apple-system,'SF Pro Display',sans-serif"
+                font-size="58" font-weight="600" fill="#fff" letter-spacing="-2">Aя</text>
+        </svg>
+      </div>
+      <div>
+        <p class="name">2 · «Aя» на глубоком фоне</p>
+        <p class="verdict">Держит смысл даже при 32&nbsp;px — буквы читаются, когда штрихи бы слиплись. Пара к значку C.</p>
+      </div>
+    </div>
+
+    <div class="app">
+      <div class="app-art">
+        <svg width="128" height="128" viewBox="0 0 128 128">
+          <defs>
+            <linearGradient id="g3" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#E9EEF3"/><stop offset="1" stop-color="#BCCBD8"/>
+            </linearGradient>
+            <linearGradient id="g3v" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#2E86FF"/><stop offset="1" stop-color="#0B4FB8"/>
+            </linearGradient>
+          </defs>
+          <rect x="6" y="6" width="116" height="116" rx="27" fill="url(#g3)"/>
+          <path d="M32 34h20l12 40 12-40h20L76 100H52z" fill="url(#g3v)"/>
+          <rect x="6" y="6" width="116" height="116" rx="27" fill="url(#s1)"/>
+          <rect x="6.5" y="6.5" width="115" height="115" rx="26.5" fill="none" stroke="#fff" stroke-opacity=".7"/>
+        </svg>
+        <svg width="32" height="32" viewBox="0 0 128 128">
+          <rect x="6" y="6" width="116" height="116" rx="27" fill="url(#g3)"/>
+          <path d="M32 34h20l12 40 12-40h20L76 100H52z" fill="url(#g3v)"/>
+        </svg>
+      </div>
+      <div>
+        <p class="name" style="color:var(--good)">3 · Монограмма V, светлая — ВЫБРАНО</p>
+        <p class="verdict">Стеклянная, в духе macOS&nbsp;26. Бренд, а не указатель. Пара к значку D.</p>
+      </div>
+    </div>
+
+    <div class="app">
+      <div class="app-art">
+        <svg width="128" height="128" viewBox="0 0 128 128">
+          <defs>
+            <linearGradient id="g4" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#3B2E6E"/><stop offset=".6" stop-color="#1D5FA8"/><stop offset="1" stop-color="#0D2A4A"/>
+            </linearGradient>
+          </defs>
+          <rect x="6" y="6" width="116" height="116" rx="27" fill="url(#g4)"/>
+          <rect x="6" y="6" width="116" height="116" rx="27" fill="url(#s1)"/>
+          <rect x="6.5" y="6.5" width="115" height="115" rx="26.5" fill="none" stroke="#fff" stroke-opacity=".3"/>
+          <g fill="none" stroke="#fff" stroke-width="7.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M30 52a36 36 0 0 1 61-10"/><path d="M98 76a36 36 0 0 1-61 10"/>
+            <path d="M92 24v20H72"/><path d="M36 104V84h20"/>
+          </g>
+        </svg>
+        <svg width="32" height="32" viewBox="0 0 128 128">
+          <rect x="6" y="6" width="116" height="116" rx="27" fill="url(#g4)"/>
+          <g fill="none" stroke="#fff" stroke-width="7.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M30 52a36 36 0 0 1 61-10"/><path d="M98 76a36 36 0 0 1-61 10"/>
+            <path d="M92 24v20H72"/><path d="M36 104V84h20"/>
+          </g>
+        </svg>
+      </div>
+      <div>
+        <p class="name">4 · Кольцевой разворот</p>
+        <p class="verdict">Буквальное «verto» — поворот. <span class="con">На мелком размере путается с «обновить».</span> Пара к значку B.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="rec">
+    <b>Выбрана иконка 3 — светлая монограмма V.</b> Бренд, а не указатель: стеклянная плашка в духе macOS&nbsp;26. Значок для строки меню подбирается к ней в разделе выше.
+  </div>
+</section>
+
+<footer>
+  <p>Значки в строке меню показаны шаблонными — в приложении их красит macOS, поэтому на светлой полосе они станут тёмными автоматически. Иконки приложения нарисованы как SVG и будут собраны в <code>.icns</code> утилитой <code>iconutil</code>, без каталога ассетов и без Xcode.</p>
+</footer>
+
+</div>

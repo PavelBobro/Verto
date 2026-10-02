@@ -1,0 +1,864 @@
+<title>Verto Popover States</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500&family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&display=swap">
+
+<style>
+/* ───────────────────────── tokens ───────────────────────── */
+:root{
+  --paper:#EDEFF2;
+  --paper-2:#F6F7F9;
+  --ink:#13161B;
+  --ink-2:#3D4550;
+  --muted:#5C6672;
+  --rule:#D2D8DF;
+  --rule-soft:#E1E6EB;
+  --accent:#0060CC;
+  --warn:#A85B00;
+
+  --serif:"Newsreader",Georgia,"Times New Roman",serif;
+  --sans:"IBM Plex Sans","Helvetica Neue",Helvetica,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,monospace;
+
+  --measure:66ch;
+  --gutter:clamp(20px,5vw,64px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --paper:#101317;
+    --paper-2:#171B21;
+    --ink:#E7EAEE;
+    --ink-2:#B4BCC6;
+    --muted:#8A94A0;
+    --rule:#272D35;
+    --rule-soft:#1E232A;
+    --accent:#4DA3FF;
+    --warn:#E0A055;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#101317;
+  --paper-2:#171B21;
+  --ink:#E7EAEE;
+  --ink-2:#B4BCC6;
+  --muted:#8A94A0;
+  --rule:#272D35;
+  --rule-soft:#1E232A;
+  --accent:#4DA3FF;
+  --warn:#E0A055;
+}
+
+/* macOS surfaces carry their own fixed palettes — they depict the system,
+   not this page, so they never inherit the page theme.
+   Значения приближают NSGlassEffectView (macOS 26), style .regular */
+.mac-light{
+  --m-bg:rgba(252,252,253,.58);
+  --m-solid:rgba(252,252,253,.72);
+  --m-edge:rgba(255,255,255,.75);
+  --m-rim:rgba(0,0,0,.10);
+  --m-hair:rgba(0,0,0,.07);
+  --m-spec:rgba(255,255,255,.92);
+  --m-spec-2:rgba(255,255,255,.35);
+  --m-label:#141416;
+  --m-label-2:#5F5F66;
+  --m-label-3:#93939C;
+  --m-blue:#0071E3;
+  --m-warn:#9A4B00;
+  --m-fill:rgba(0,0,0,.055);
+}
+.mac-dark{
+  --m-bg:rgba(46,48,53,.52);
+  --m-solid:rgba(46,48,53,.66);
+  --m-edge:rgba(255,255,255,.20);
+  --m-rim:rgba(0,0,0,.45);
+  --m-hair:rgba(255,255,255,.09);
+  --m-spec:rgba(255,255,255,.42);
+  --m-spec-2:rgba(255,255,255,.10);
+  --m-label:#F5F5F7;
+  --m-label-2:#ACACB4;
+  --m-label-3:#7B7B84;
+  --m-blue:#0A84FF;
+  --m-warn:#FF9F0A;
+  --m-fill:rgba(255,255,255,.09);
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:var(--paper);
+  color:var(--ink);
+  font-family:var(--sans);
+  font-size:15px;
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1120px;margin:0 auto;padding:0 var(--gutter)}
+
+/* ───────────────────────── page type ───────────────────────── */
+.eyebrow{
+  font-family:var(--mono);font-size:11px;font-weight:500;
+  letter-spacing:.14em;text-transform:uppercase;color:var(--muted);
+  margin:0;
+}
+h1{
+  font-family:var(--serif);font-weight:600;
+  font-size:clamp(38px,6.2vw,68px);line-height:.98;letter-spacing:-.02em;
+  margin:14px 0 0;text-wrap:balance;
+}
+h1 em{font-style:italic;font-weight:400;color:var(--accent)}
+h2{
+  font-family:var(--serif);font-weight:600;
+  font-size:clamp(24px,3vw,34px);line-height:1.1;letter-spacing:-.015em;
+  margin:0;text-wrap:balance;
+}
+h3{
+  font-family:var(--mono);font-size:11px;font-weight:500;
+  letter-spacing:.13em;text-transform:uppercase;color:var(--ink);
+  margin:0 0 8px;
+}
+p{margin:0;max-width:var(--measure)}
+.deck{font-size:17px;color:var(--ink-2);margin-top:20px;max-width:56ch}
+.note{font-size:13.5px;color:var(--muted)}
+b{font-weight:500;color:var(--ink)}
+code{
+  font-family:var(--mono);font-size:.88em;
+  background:var(--rule-soft);padding:.12em .38em;border-radius:4px;
+}
+
+/* ───────────────────────── page frame ───────────────────────── */
+header.masthead{padding:clamp(48px,8vw,96px) 0 0}
+.meta{
+  display:flex;flex-wrap:wrap;gap:0 34px;
+  font-family:var(--mono);font-size:11.5px;color:var(--muted);
+  margin-top:38px;padding-top:18px;border-top:1px solid var(--rule);
+}
+.meta span b{color:var(--ink);font-weight:500}
+
+section{padding:clamp(56px,8vw,104px) 0 0}
+.sec-head{
+  display:grid;grid-template-columns:minmax(0,7.5rem) minmax(0,1fr);
+  gap:clamp(16px,3vw,40px);align-items:baseline;
+  padding-bottom:26px;
+}
+.sec-head .idx{
+  font-family:var(--mono);font-size:11px;font-weight:500;
+  letter-spacing:.12em;text-transform:uppercase;color:var(--muted);
+}
+.sec-head p{margin-top:10px;color:var(--ink-2);font-size:14.5px}
+
+/* ───────────────────────── desktop hero ───────────────────────── */
+.desktop{
+  position:relative;overflow:hidden;
+  border-radius:12px;
+  border:1px solid rgba(0,0,0,.28);
+  background:
+    radial-gradient(120% 90% at 78% -10%,#2E6E77 0%,rgba(46,110,119,0) 58%),
+    radial-gradient(90% 70% at 12% 105%,#1D3A5C 0%,rgba(29,58,92,0) 62%),
+    linear-gradient(168deg,#101C26 0%,#16242E 46%,#0C141B 100%);
+  box-shadow:0 30px 70px -30px rgba(6,12,20,.65);
+  padding-bottom:46px;
+  margin-top:8px;
+}
+.desktop::after{ /* grain */
+  content:"";position:absolute;inset:0;pointer-events:none;opacity:.5;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)' opacity='.055'/%3E%3C/svg%3E");
+}
+.menubar{
+  position:relative;z-index:2;
+  height:26px;display:flex;align-items:center;justify-content:flex-end;
+  gap:16px;padding:0 12px 0 14px;
+  background:rgba(20,26,33,.55);
+  backdrop-filter:blur(28px) saturate(1.6);
+  -webkit-backdrop-filter:blur(28px) saturate(1.6);
+  border-bottom:.5px solid rgba(255,255,255,.10);
+  font-family:-apple-system,"SF Pro Text","Helvetica Neue",sans-serif;
+  font-size:12.5px;color:rgba(255,255,255,.92);
+}
+.menubar .mb-left{margin-right:auto;display:flex;align-items:center;gap:15px}
+.menubar .mb-left .app{font-weight:600}
+.menubar .glyph{display:flex;align-items:center;opacity:.92}
+.mb-active{
+  display:flex;align-items:center;padding:2px 6px;border-radius:5px;
+  background:rgba(255,255,255,.20);
+}
+.stage{
+  position:relative;z-index:2;
+  display:flex;justify-content:flex-end;
+  padding:9px 74px 0 24px;
+}
+.caption-float{
+  position:absolute;left:26px;top:64px;max-width:23ch;
+  font-family:var(--mono);font-size:11px;line-height:1.75;
+  letter-spacing:.03em;color:rgba(226,236,244,.62);
+}
+.caption-float b{color:#fff;font-weight:500}
+@media(max-width:760px){
+  .caption-float{position:static;max-width:none;padding:20px 24px 0;}
+  .stage{justify-content:center;padding:9px 12px 0}
+}
+
+/* ───────────────────────── the popover ───────────────────────── */
+.pop{
+  position:relative;width:360px;flex:0 0 360px;
+  font-family:-apple-system,"SF Pro Text","Helvetica Neue",Helvetica,sans-serif;
+  background:var(--m-bg);
+  backdrop-filter:blur(34px) saturate(2.2) brightness(1.06);
+  -webkit-backdrop-filter:blur(34px) saturate(2.2) brightness(1.06);
+  border-radius:18px;
+  color:var(--m-label);
+  text-align:left;
+  isolation:isolate;
+  box-shadow:
+    inset 0 .5px 0 var(--m-spec),          /* верхний блик */
+    inset 0 -.5px 0 var(--m-spec-2),       /* нижний отражённый свет */
+    inset 0 0 0 .5px var(--m-edge),        /* внутренняя кромка стекла */
+    0 0 0 .5px var(--m-rim),               /* внешний контур */
+    0 22px 50px -14px rgba(0,0,0,.42),
+    0 3px 10px -3px rgba(0,0,0,.18);
+}
+.pop::before{ /* линза: свет собирается в верхнем крае */
+  content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+  background:
+    radial-gradient(130% 65% at 22% -12%,var(--m-spec-2) 0%,transparent 62%),
+    linear-gradient(178deg,rgba(255,255,255,.16) 0%,transparent 26%);
+  mix-blend-mode:screen;z-index:-1;
+}
+.pop--flat{
+  box-shadow:
+    inset 0 .5px 0 var(--m-spec),
+    inset 0 -.5px 0 var(--m-spec-2),
+    inset 0 0 0 .5px var(--m-edge),
+    0 0 0 .5px var(--m-rim),
+    0 14px 30px -14px rgba(0,0,0,.32);
+  background:var(--m-solid);
+}
+.pop-arrow{
+  position:absolute;top:-6px;right:26px;width:14px;height:14px;
+  background:var(--m-bg);
+  backdrop-filter:blur(34px) saturate(2.2) brightness(1.06);
+  -webkit-backdrop-filter:blur(34px) saturate(2.2) brightness(1.06);
+  box-shadow:inset .5px .5px 0 var(--m-spec),inset 0 0 0 .5px var(--m-edge);
+  transform:rotate(45deg);border-radius:3px;
+}
+
+.pop-head{
+  display:flex;align-items:center;gap:8px;
+  padding:9px 11px 9px 12px;
+  border-bottom:.5px solid var(--m-hair);
+}
+.dir{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:12px;font-weight:500;letter-spacing:.01em;
+  color:var(--m-label);
+  background:var(--m-fill);
+  border:none;border-radius:999px;padding:4px 11px;
+  cursor:pointer;font-family:inherit;
+  box-shadow:inset 0 .5px 0 var(--m-spec),inset 0 0 0 .5px var(--m-edge);
+  transition:background .16s ease;
+}
+.dir:hover{background:color-mix(in srgb,var(--m-fill) 180%,transparent)}
+.dir svg{display:block;opacity:.55}
+.dir .lang{font-variant-numeric:tabular-nums}
+.dir--warn{color:var(--m-warn)}
+.warnmark{
+  display:inline-flex;align-items:center;gap:4px;
+  font-size:11px;color:var(--m-warn);margin-left:1px;
+}
+.hint{
+  margin-left:auto;font-size:11px;color:var(--m-label-3);
+  letter-spacing:.02em;
+}
+
+.field{
+  padding:13px 15px;font-size:13px;line-height:1.45;
+  min-height:76px;white-space:pre-wrap;
+}
+.field--grown{min-height:0}
+.field.src{color:var(--m-label)}
+.field.out{color:var(--m-label);padding-top:12px;padding-bottom:14px}
+.placeholder{color:var(--m-label-3)}
+.sep{height:.5px;background:var(--m-hair);margin:0 14px}
+.caret{
+  display:inline-block;width:1.5px;height:14px;vertical-align:-2px;
+  background:var(--m-blue);margin-left:1px;
+  animation:blink 1.06s steps(1,end) infinite;
+}
+@keyframes blink{0%,50%{opacity:1}51%,100%{opacity:0}}
+
+.pop-foot{
+  display:flex;align-items:center;gap:14px;
+  padding:8px 14px 9px;
+  border-top:.5px solid var(--m-hair);
+  font-size:11px;color:var(--m-label-3);
+}
+.pop-foot .k{color:var(--m-label-2)}
+.pop-foot .right{margin-left:auto}
+
+/* in-popover system states */
+.sysrow{
+  display:flex;align-items:center;gap:9px;
+  padding:13px 14px;font-size:12.5px;color:var(--m-label-2);
+}
+.spin{
+  width:13px;height:13px;flex:0 0 13px;border-radius:50%;
+  border:1.6px solid var(--m-label-3);border-top-color:transparent;
+  animation:spin .82s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+.bar{
+  height:4px;border-radius:2px;background:var(--m-fill);
+  margin:0 14px 14px;overflow:hidden;
+}
+.bar i{display:block;height:100%;width:38%;border-radius:2px;background:var(--m-blue)}
+.empty-out{color:var(--m-label-3);font-size:13px}
+
+@media(prefers-reduced-motion:reduce){
+  .caret,.spin{animation:none}
+  .caret{opacity:1}
+}
+
+/* ───────────────────────── states list ───────────────────────── */
+.plate{
+  padding:22px;border-radius:16px;position:relative;overflow:hidden;
+  background:
+    radial-gradient(90% 120% at 88% -18%,#4E8A93 0%,rgba(78,138,147,0) 55%),
+    radial-gradient(80% 90% at 6% 108%,#2D5E86 0%,rgba(45,94,134,0) 60%),
+    linear-gradient(150deg,#DCE4E9 0%,#C6D2DA 52%,#B9C6D0 100%);
+}
+.plate--night{
+  background:
+    radial-gradient(90% 120% at 84% -20%,#2F6F79 0%,rgba(47,111,121,0) 56%),
+    radial-gradient(80% 90% at 8% 110%,#1E3E62 0%,rgba(30,62,98,0) 60%),
+    linear-gradient(150deg,#16202A 0%,#101922 55%,#0B1219 100%);
+}
+.plate::after{
+  content:"";position:absolute;inset:0;pointer-events:none;opacity:.42;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)' opacity='.05'/%3E%3C/svg%3E");
+}
+.plate .pop{position:relative;z-index:1}
+
+.states{display:flex;flex-direction:column;gap:0}
+.state{
+  display:grid;grid-template-columns:minmax(0,1fr) 404px;
+  gap:clamp(20px,5vw,64px);align-items:start;
+  padding:34px 0;border-top:1px solid var(--rule-soft);
+}
+.state:first-child{border-top:1px solid var(--rule)}
+.state .why{padding-top:2px}
+.state .why p{font-size:14px;color:var(--ink-2);margin-top:0}
+.state .why p+p{margin-top:10px}
+.tag{
+  display:inline-block;font-family:var(--mono);font-size:10.5px;font-weight:500;
+  letter-spacing:.1em;text-transform:uppercase;
+  color:var(--muted);border:1px solid var(--rule);border-radius:999px;
+  padding:2px 9px;margin-bottom:12px;
+}
+.tag--warn{color:var(--warn);border-color:color-mix(in srgb,var(--warn) 35%,transparent)}
+.ref{font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:.02em}
+@media(max-width:860px){
+  .state{grid-template-columns:minmax(0,1fr);gap:22px}
+  .pop{width:100%;max-width:360px;flex:1 1 auto}
+  .plate{padding:18px}
+}
+
+/* the pair — core demo */
+.pair{
+  display:flex;flex-wrap:wrap;gap:clamp(18px,3vw,34px);
+  align-items:flex-start;
+}
+.pair-item{display:flex;flex-direction:column;gap:11px}
+.pair-cap{
+  font-family:var(--mono);font-size:11px;letter-spacing:.03em;color:var(--muted);
+  max-width:360px;
+}
+.pair-cap b{color:var(--ink);font-weight:500}
+.verdict{
+  margin-top:26px;padding:16px 18px;
+  border-left:2px solid var(--accent);
+  background:var(--paper-2);
+  border-radius:0 8px 8px 0;
+  font-size:14.5px;color:var(--ink-2);max-width:60ch;
+}
+.verdict b{color:var(--ink)}
+
+/* settings window */
+.win{
+  width:520px;max-width:100%;
+  font-family:-apple-system,"SF Pro Text","Helvetica Neue",Helvetica,sans-serif;
+  background:var(--m-solid);
+  backdrop-filter:blur(34px) saturate(2.2) brightness(1.06);
+  -webkit-backdrop-filter:blur(34px) saturate(2.2) brightness(1.06);
+  border-radius:14px;
+  box-shadow:
+    inset 0 .5px 0 var(--m-spec),
+    inset 0 0 0 .5px var(--m-edge),
+    0 0 0 .5px var(--m-rim),
+    0 30px 64px -24px rgba(0,0,0,.45);
+  overflow:hidden;color:var(--m-label);
+}
+.titlebar{
+  display:flex;align-items:center;gap:8px;height:38px;padding:0 13px;
+  border-bottom:.5px solid var(--m-hair);
+}
+.lights{display:flex;gap:8px}
+.lights i{width:12px;height:12px;border-radius:50%;display:block}
+.lights i:nth-child(1){background:#FF5F57}
+.lights i:nth-child(2){background:#FEBC2E}
+.lights i:nth-child(3){background:#28C840}
+.titlebar .t{
+  position:absolute;left:0;right:0;text-align:center;
+  font-size:13px;font-weight:600;pointer-events:none;
+}
+.tb-wrap{position:relative}
+.form{padding:20px 22px 22px;display:flex;flex-direction:column;gap:15px}
+.row{display:grid;grid-template-columns:132px minmax(0,1fr);gap:14px;align-items:center}
+.row .lbl{font-size:13px;color:var(--m-label-2);text-align:right}
+.ctrl{
+  display:inline-flex;align-items:center;justify-content:space-between;gap:8px;
+  font-size:13px;background:var(--m-fill);
+  border-radius:8px;padding:6px 10px;min-width:0;
+  box-shadow:inset 0 .5px 0 var(--m-spec),inset 0 0 0 .5px var(--m-edge);
+}
+.ctrl .chev{opacity:.5}
+.kbd{
+  font-family:-apple-system,sans-serif;font-size:13px;
+  background:var(--m-fill);border-radius:8px;
+  padding:6px 11px;letter-spacing:.06em;
+  box-shadow:inset 0 .5px 0 var(--m-spec),inset 0 0 0 .5px var(--m-edge);
+}
+.check{display:flex;align-items:center;gap:8px;font-size:13px}
+.box{
+  width:15px;height:15px;border-radius:4px;background:var(--m-blue);
+  display:flex;align-items:center;justify-content:center;flex:0 0 15px;
+}
+.sub{font-size:11.5px;color:var(--m-label-3);grid-column:2}
+
+/* menu-bar icon states */
+.icons{display:flex;flex-wrap:wrap;gap:14px;margin-top:4px}
+.icon-chip{
+  display:flex;align-items:center;gap:10px;
+  background:#1A222B;border:1px solid rgba(255,255,255,.09);
+  border-radius:8px;padding:9px 13px;
+}
+.icon-chip .lab{
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;
+  color:rgba(226,236,244,.58);text-transform:uppercase;
+}
+
+footer{
+  margin-top:clamp(64px,9vw,120px);
+  padding:26px 0 60px;border-top:1px solid var(--rule);
+}
+footer .cols{display:flex;flex-wrap:wrap;gap:36px}
+footer p{font-size:13px;color:var(--muted);max-width:44ch}
+footer .h{font-family:var(--mono);font-size:10.5px;letter-spacing:.11em;
+  text-transform:uppercase;color:var(--ink);margin-bottom:7px}
+a{color:var(--accent)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:3px}
+</style>
+
+<div class="wrap">
+
+<header class="masthead">
+  <p class="eyebrow">Verto · макет интерфейса · редакция 2</p>
+  <h1>Вставил текст.<br><em>Направление —</em> не твоя забота.</h1>
+  <p class="deck">Переводчик в строке меню macOS. Один попап шириной 360&nbsp;pt, никаких переключателей направления, ноль лишних нажатий между вставкой и результатом.</p>
+  <div class="meta">
+    <span><b>360 × 300 pt</b> · базовая, растёт до 520</span>
+    <span><b>SF&nbsp;Pro Text</b> 13 / 12 / 11 pt</span>
+    <span><b>NSGlassEffectView</b> · .regular</span>
+    <span><b>macOS 26+</b></span>
+  </div>
+</header>
+
+<!-- ────────────── HERO ────────────── -->
+<section>
+  <div class="sec-head">
+    <div class="idx">В контексте</div>
+    <div>
+      <h2>Живёт в строке меню, а не в Dock</h2>
+      <p>Вызов по <code>⌥⌘T</code> из любого приложения. Иконка подсвечивается, пока попап открыт — стандартное поведение <code>NSStatusItem</code>.</p>
+    </div>
+  </div>
+
+  <div class="desktop">
+    <div class="menubar">
+      <div class="mb-left">
+        <span class="glyph" aria-hidden="true">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M8 1.6 2 4.2v3.5c0 3.3 2.4 6 6 6.7 3.6-.7 6-3.4 6-6.7V4.2L8 1.6Z"/></svg>
+        </span>
+        <span class="app">Finder</span>
+        <span>Файл</span><span>Правка</span><span>Вид</span><span>Окно</span>
+      </div>
+      <span class="mb-active" aria-label="Verto, открыт">
+        <svg width="15" height="15" viewBox="0 0 20 20" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h11M11 4l3 3-3 3"/><path d="M17 13H6M9 16l-3-3 3-3"/></svg>
+      </span>
+      <span class="glyph" aria-hidden="true">
+        <svg width="15" height="12" viewBox="0 0 20 16" fill="currentColor"><path d="M2 5h2v6H2zM6 3h2v8H6zM10 6h2v5h-2zM14 1h2v10h-2z" opacity=".9"/></svg>
+      </span>
+      <span class="glyph" aria-hidden="true">
+        <svg width="17" height="12" viewBox="0 0 22 14" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="1" y="2.6" width="16" height="8.8" rx="2.4"/><path d="M20 6v3" stroke-linecap="round"/><rect x="2.8" y="4.4" width="9" height="5.2" rx="1.2" fill="currentColor" stroke="none"/></svg>
+      </span>
+      <span style="font-variant-numeric:tabular-nums">Пн 8 сен&nbsp;&nbsp;9:41</span>
+    </div>
+
+    <p class="caption-float">
+      Курсор стоял в поле, пришла<br>английская фраза. <b>Пара RU ⇄ EN<br>не менялась.</b> Приложение само<br>развернуло направление.
+    </p>
+
+    <div class="stage">
+      <div class="pop mac-dark">
+        <div class="pop-arrow"></div>
+        <div class="pop-head">
+          <button class="dir" type="button">
+            <span class="lang">EN</span>
+            <svg width="13" height="9" viewBox="0 0 14 10" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M1 5h11M9 2l3 3-3 3"/></svg>
+            <span class="lang">RU</span>
+          </button>
+          <span class="hint">⌘S развернуть</span>
+        </div>
+        <div class="field src">Could you rebase this onto main before we cut the release?</div>
+        <div class="sep"></div>
+        <div class="field out">Не мог бы ты сделать rebase на main до того, как мы соберём релиз?</div>
+        <div class="pop-foot">
+          <span><span class="k">⌘↩</span> Скопировать и закрыть</span>
+          <span class="right"><span class="k">esc</span></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ────────────── CORE ────────────── -->
+<section>
+  <div class="sec-head">
+    <div class="idx">Суть</div>
+    <div>
+      <h2>Два перевода подряд, ни одного переключения</h2>
+      <p>Это единственное, ради чего проект существует. Пара языков задана один раз в настройках; направление внутри пары определяется по тексту — по письменности, а не ML-моделью.</p>
+    </div>
+  </div>
+
+  <div class="pair">
+    <div class="pair-item">
+      <div class="plate"><div class="pop pop--flat mac-light">
+        <div class="pop-head">
+          <button class="dir" type="button">
+            <span class="lang">RU</span>
+            <svg width="13" height="9" viewBox="0 0 14 10" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M1 5h11M9 2l3 3-3 3"/></svg>
+            <span class="lang">EN</span>
+          </button>
+          <span class="hint">⌘S развернуть</span>
+        </div>
+        <div class="field src">задеплой на staging через CI</div>
+        <div class="sep"></div>
+        <div class="field out">deploy to staging via CI</div>
+        <div class="pop-foot">
+          <span><span class="k">⌘↩</span> Скопировать и закрыть</span>
+          <span class="right"><span class="k">esc</span></span>
+        </div>
+      </div></div>
+      <p class="pair-cap"><b>13:04</b> — вставлен русский текст.<br>Кириллицы 62 % — выше порога 15 %.</p>
+    </div>
+
+    <div class="pair-item">
+      <div class="plate"><div class="pop pop--flat mac-light">
+        <div class="pop-head">
+          <button class="dir" type="button">
+            <span class="lang">EN</span>
+            <svg width="13" height="9" viewBox="0 0 14 10" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M1 5h11M9 2l3 3-3 3"/></svg>
+            <span class="lang">RU</span>
+          </button>
+          <span class="hint">⌘S развернуть</span>
+        </div>
+        <div class="field src">the build is flaky on arm64 runners</div>
+        <div class="sep"></div>
+        <div class="field out">сборка нестабильна на раннерах arm64</div>
+        <div class="pop-foot">
+          <span><span class="k">⌘↩</span> Скопировать и закрыть</span>
+          <span class="right"><span class="k">esc</span></span>
+        </div>
+      </div></div>
+      <p class="pair-cap"><b>13:04</b> — то же окно, следующая вставка.<br>Кириллицы 0 % — направление развёрнуто.</p>
+    </div>
+  </div>
+
+  <div class="verdict">
+    Ровно здесь ломался <b>GoogleTranslate&nbsp;(dbilgili)</b>: второй перевод потребовал бы найти переключатель, кликнуть, дождаться перерисовки. Индикатор направления в шапке — не декоративная подпись, а <b>кнопка</b>: если детекция ошиблась, <code>⌘S</code> или клик разворачивает пару, не открывая настройки.
+  </div>
+</section>
+
+<!-- ────────────── STATES ────────────── -->
+<section>
+  <div class="sec-head">
+    <div class="idx">Состояния</div>
+    <div>
+      <h2>Всё, что попап может показать</h2>
+      <p>Перечислены по требованиям ТЗ. Каждое состояние отличается от соседнего формой, а не только текстом — чтобы читаться боковым зрением.</p>
+    </div>
+  </div>
+
+  <div class="states">
+
+    <div class="state">
+      <div class="why">
+        <span class="tag">Покой</span>
+        <h3>Открыт, пусто</h3>
+        <p>Фокус в поле сразу — можно жать <code>⌘V</code> вслепую. Направление показывается по последней паре, но ещё ничего не решено, поэтому нижнее поле не занимает места.</p>
+        <p class="ref">FR-3 · автофокус</p>
+      </div>
+      <div class="plate"><div class="pop pop--flat mac-light">
+        <div class="pop-head">
+          <button class="dir" type="button">
+            <span class="lang">RU</span>
+            <svg width="13" height="9" viewBox="0 0 14 10" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M1 5h11M9 2l3 3-3 3"/></svg>
+            <span class="lang">EN</span>
+          </button>
+          <span class="hint">⌥⌘T</span>
+        </div>
+        <div class="field src"><span class="placeholder">Вставьте или введите текст</span><span class="caret"></span></div>
+        <div class="sep"></div>
+        <div class="field out empty-out">Перевод появится здесь</div>
+        <div class="pop-foot">
+          <span><span class="k">⌘↩</span> Скопировать и закрыть</span>
+          <span class="right"><span class="k">esc</span></span>
+        </div>
+      </div></div>
+    </div>
+
+    <div class="state">
+      <div class="why">
+        <span class="tag">Работа</span>
+        <h3>Переводит</h3>
+        <p>Появляется через 300&nbsp;мс тишины после последнего нажатия. Предыдущий запрос к этому моменту уже снят через <code>session.cancel()</code>.</p>
+        <p class="ref">FR-2 · debounce 300 мс</p>
+      </div>
+      <div class="plate"><div class="pop pop--flat mac-light">
+        <div class="pop-head">
+          <button class="dir" type="button">
+            <span class="lang">RU</span>
+            <svg width="13" height="9" viewBox="0 0 14 10" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M1 5h11M9 2l3 3-3 3"/></svg>
+            <span class="lang">EN</span>
+          </button>
+          <span class="hint">⌘S развернуть</span>
+        </div>
+        <div class="field src">Собрание перенесли на четверг, повестку пришлю вечером</div>
+        <div class="sep"></div>
+        <div class="sysrow"><span class="spin"></span> Перевод…</div>
+        <div class="pop-foot">
+          <span><span class="k">⌘↩</span> Скопировать и закрыть</span>
+          <span class="right"><span class="k">esc</span></span>
+        </div>
+      </div></div>
+    </div>
+
+    <div class="state">
+      <div class="why">
+        <span class="tag">Рост</span>
+        <h3>Текст длиннее базовой высоты</h3>
+        <p>Высота попапа фиксирована, пока текст в неё помещается — окно не прыгает при каждой вставке. Длинный текст растягивает его вниз, до потолка в 520&nbsp;pt; дальше поля скроллятся внутри себя.</p>
+        <p>Растёт только то поле, которому не хватило места. Второе сохраняет базовую высоту, чтобы перевод не уезжал из-под глаз.</p>
+        <p class="ref">FR-8</p>
+      </div>
+      <div class="plate"><div class="pop pop--flat mac-light">
+        <div class="pop-head">
+          <button class="dir" type="button">
+            <span class="lang">RU</span>
+            <svg width="13" height="9" viewBox="0 0 14 10" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M1 5h11M9 2l3 3-3 3"/></svg>
+            <span class="lang">EN</span>
+          </button>
+          <span class="hint">⌘S развернуть</span>
+        </div>
+        <div class="field src field--grown">Если сборка падает на arm64, откати последний коммит в CI-конфиге и перезапусти пайплайн — вчера ровно это чинило проблему. Логи я приложил в тред.</div>
+        <div class="sep"></div>
+        <div class="field out field--grown">If the build fails on arm64, roll back the last commit in the CI config and restart the pipeline — that fixed exactly this yesterday. I attached the logs in the thread.</div>
+        <div class="pop-foot">
+          <span><span class="k">⌘↩</span> Скопировать и закрыть</span>
+          <span class="right"><span class="k">esc</span></span>
+        </div>
+      </div></div>
+    </div>
+
+    <div class="state">
+      <div class="why">
+        <span class="tag tag--warn">Внимание</span>
+        <h3>Уверенность низкая</h3>
+        <p>Текст на языке вне пары. Приложение приняло его за английский и перевело — но говорит об этом вслух, вместо того чтобы молча выдать неверный результат.</p>
+        <p>Значок янтарный, а не красный: это не ошибка, а неуверенность. Красный в системе означает деструктивное действие.</p>
+        <p class="ref">FR-6 · Р-13</p>
+      </div>
+      <div class="plate"><div class="pop pop--flat mac-light">
+        <div class="pop-head">
+          <button class="dir dir--warn" type="button">
+            <span class="lang">EN</span>
+            <svg width="13" height="9" viewBox="0 0 14 10" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M1 5h11M9 2l3 3-3 3"/></svg>
+            <span class="lang">RU</span>
+            <span class="warnmark" title="Направление определено предположительно">
+              <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8 1.4 15 14H1L8 1.4Zm0 4.1a.75.75 0 0 0-.75.78l.18 3.4a.57.57 0 0 0 1.14 0l.18-3.4A.75.75 0 0 0 8 5.5Zm0 5.3a.8.8 0 1 0 0 1.6.8.8 0 0 0 0-1.6Z"/></svg>
+            </span>
+          </button>
+          <span class="hint">⌘S развернуть</span>
+        </div>
+        <div class="field src">Le déploiement a échoué sur le serveur</div>
+        <div class="sep"></div>
+        <div class="field out">Развёртывание не удалось на сервере</div>
+        <div class="pop-foot">
+          <span style="color:var(--m-warn)">Направление определено предположительно</span>
+          <span class="right"><span class="k">⌘S</span></span>
+        </div>
+      </div></div>
+    </div>
+
+    <div class="state">
+      <div class="why">
+        <span class="tag">Первый запуск</span>
+        <h3>Скачивается языковой пакет</h3>
+        <p>Отдельное состояние, визуально не похожее на «переводит». Иначе при первом запуске приложение выглядит зависшим — а качается оно долго и один раз.</p>
+        <p>Различается по <code>LanguageAvailability.status</code>: <code>.supported</code> означает «поддерживается, но не установлен».</p>
+        <p class="ref">FR-7 · Р-10</p>
+      </div>
+      <div class="plate"><div class="pop pop--flat mac-light">
+        <div class="pop-head">
+          <button class="dir" type="button">
+            <span class="lang">RU</span>
+            <svg width="13" height="9" viewBox="0 0 14 10" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M1 5h11M9 2l3 3-3 3"/></svg>
+            <span class="lang">EN</span>
+          </button>
+          <span class="hint">Один раз</span>
+        </div>
+        <div class="field src">задеплой на staging через CI</div>
+        <div class="sep"></div>
+        <div class="sysrow">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" style="opacity:.6"><path d="M8 1.6a.7.7 0 0 1 .7.7v6.3l2-2a.7.7 0 1 1 1 1L8.5 10.6a.7.7 0 0 1-1 0L4.3 7.6a.7.7 0 0 1 1-1l2 2V2.3a.7.7 0 0 1 .7-.7ZM2.6 12a.7.7 0 0 1 .7.7v.6h9.4v-.6a.7.7 0 1 1 1.4 0v.9a1.1 1.1 0 0 1-1.1 1.1H3a1.1 1.1 0 0 1-1.1-1.1v-.9a.7.7 0 0 1 .7-.7Z"/></svg>
+          Загрузка русского языка — 38 %
+        </div>
+        <div class="bar"><i></i></div>
+        <div class="pop-foot">
+          <span>Дальше перевод работает офлайн</span>
+        </div>
+      </div></div>
+    </div>
+
+    <div class="state">
+      <div class="why">
+        <span class="tag">Тупик</span>
+        <h3>Пара не поддерживается</h3>
+        <p>Ошибка называет причину и следующий шаг, а не извиняется. Кнопка ведёт прямо в тот раздел настроек, где это чинится.</p>
+        <p class="ref">FR-2 · <code>.unsupported</code></p>
+      </div>
+      <div class="plate"><div class="pop pop--flat mac-light">
+        <div class="pop-head">
+          <button class="dir" type="button">
+            <span class="lang">IS</span>
+            <svg width="13" height="9" viewBox="0 0 14 10" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M1 5h11M9 2l3 3-3 3"/></svg>
+            <span class="lang">RU</span>
+          </button>
+        </div>
+        <div class="field src">Þetta er prófunartexti</div>
+        <div class="sep"></div>
+        <div class="sysrow" style="align-items:flex-start;line-height:1.45">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" style="opacity:.55;flex:0 0 14px;margin-top:1px"><path d="M8 1.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13Zm0 2.9a.75.75 0 0 1 .75.79l-.18 3.4a.57.57 0 0 1-1.14 0l-.18-3.4A.75.75 0 0 1 8 4.4Zm0 5.4a.8.8 0 1 1 0 1.6.8.8 0 0 1 0-1.6Z"/></svg>
+          <span>Apple не переводит исландский. Выберите другую пару в настройках.</span>
+        </div>
+        <div class="pop-foot">
+          <span class="right"><span class="k">Открыть настройки…</span></span>
+        </div>
+      </div></div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ────────────── SETTINGS ────────────── -->
+<section>
+  <div class="sec-head">
+    <div class="idx">Настройки</div>
+    <div>
+      <h2>Три переключателя, больше ничего</h2>
+      <p>Всё, что не влияет на скорость перевода, в настройки не попало. Пара языков — единственное, что вообще требует решения от пользователя.</p>
+    </div>
+  </div>
+
+  <div class="win mac-light">
+    <div class="tb-wrap">
+      <div class="titlebar">
+        <span class="lights"><i></i><i></i><i></i></span>
+        <span class="t">Настройки</span>
+      </div>
+    </div>
+    <div class="form">
+      <div class="row">
+        <span class="lbl">Пара языков</span>
+        <span class="ctrl">Русский ⇄ English
+          <svg class="chev" width="10" height="14" viewBox="0 0 10 14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M2.6 5.4 5 3l2.4 2.4M7.4 8.6 5 11 2.6 8.6"/></svg>
+        </span>
+      </div>
+      <div class="row">
+        <span class="lbl">Вызов</span>
+        <span class="kbd">⌥⌘T</span>
+      </div>
+      <div class="sub">Не используйте ⌥Space — занят Raycast и Alfred.</div>
+      <div class="row">
+        <span class="lbl"></span>
+        <span class="check">
+          <span class="box"><svg width="10" height="8" viewBox="0 0 10 8" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1 4.2 3.6 6.8 9 1.4"/></svg></span>
+          Запускать при входе в систему
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <div class="verdict">
+    Переключателя направления в настройках <b>нет и не появится</b>. Как только он там окажется, вернётся привычка его крутить — и приложение превратится в то, от чего уходили.
+  </div>
+</section>
+
+<!-- ────────────── ICON ────────────── -->
+<section>
+  <div class="sec-head">
+    <div class="idx">Иконка</div>
+    <div>
+      <h2>Одна иконка, три состояния</h2>
+      <p>SF Symbol в шаблонном режиме: иконку перекрашивает macOS, поэтому она сама работает в светлой и тёмной теме и на любых обоях.</p>
+      <p style="margin-top:10px">Состояния «низкая уверенность» здесь <b>нет намеренно</b>: предупреждение видно в открытом попапе, куда пользователь и так смотрит, а при закрытом попапе переводить нечего. Индикатор, который либо дублирует, либо молчит.</p>
+    </div>
+  </div>
+
+  <div class="icons">
+    <div class="icon-chip">
+      <svg width="17" height="17" viewBox="0 0 20 20" fill="none" stroke="rgba(255,255,255,.92)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h11M11 4l3 3-3 3"/><path d="M17 13H6M9 16l-3-3 3-3"/></svg>
+      <span class="lab">Покой</span>
+    </div>
+    <div class="icon-chip">
+      <span class="mb-active"><svg width="17" height="17" viewBox="0 0 20 20" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h11M11 4l3 3-3 3"/><path d="M17 13H6M9 16l-3-3 3-3"/></svg></span>
+      <span class="lab">Попап открыт</span>
+    </div>
+    <div class="icon-chip">
+      <svg width="17" height="17" viewBox="0 0 20 20" fill="none" stroke="rgba(255,255,255,.45)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h11M11 4l3 3-3 3"/><path d="M17 13H6M9 16l-3-3 3-3"/></svg>
+      <span class="lab">Загрузка пакета</span>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="cols">
+    <div>
+      <div class="h">О честности макета</div>
+      <p>Внутри всех окон намеренно указан системный шрифт <code>-apple-system</code>. На макбуке эта страница отрисуется настоящим <b>SF&nbsp;Pro</b> — то есть это не «похоже на macOS», а те же метрики, что будут в приложении.</p>
+    </div>
+    <div>
+      <div class="h">Материал</div>
+      <p>Стекло — не стилизация, а штатный <code>NSGlassEffectView</code> из macOS&nbsp;26: он уже доступен, ждать macOS&nbsp;27 не нужно. Здесь он приближён средствами CSS; в приложении будет системный, со всей рефракцией и реакцией на фон.</p>
+    </div>
+    <div>
+      <div class="h">Чего здесь нет</div>
+      <p>Перевода скриншотов, истории и озвучки — они отложены в v2 сознательно. Полный список в заметке «Verto — Бэклог v2».</p>
+    </div>
+    <div>
+      <div class="h">Статус</div>
+      <p>ТЗ прошло ревью, редакция 2. Реализация не начата: следующий шаг — скелет, проверяющий сборку без Xcode, <code>SMAppService</code> с ad-hoc подписью и прямой <code>TranslationSession</code>.</p>
+    </div>
+  </div>
+</footer>
+
+</div>
