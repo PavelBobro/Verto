@@ -86,9 +86,10 @@ zip:
 ## it — the zip's refusal can at least be answered with "Open Anyway".
 release: zip
 
-## Package Verto.app into a disk image for release.
-## hdiutil is part of macOS, so this needs no developer tooling either.
-dmg: app
+## Package Verto.app into a disk image. Kept for catalogs that require a DMG; ZIP
+## remains the preferred format for an unsigned build. Ad-hoc on purpose, like zip.
+dmg:
+	$(MAKE) app IDENTITY=
 	rm -rf .dmg $(DMG)
 	mkdir -p .dmg
 	cp -R $(BUNDLE) .dmg/

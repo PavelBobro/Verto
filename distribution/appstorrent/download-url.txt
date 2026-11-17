@@ -1,0 +1,4 @@
+DMG (для appstorrent): https://github.com/PavelBobro/Verto/releases/latest/download/Verto-0.3.1.dmg
+ZIP (рекомендуемый формат для неподписанного приложения): https://github.com/PavelBobro/Verto/releases/latest/download/Verto-0.3.1.zip
+Changelog: https://github.com/PavelBobro/Verto/releases/tag/v0.3.1
+Репозиторий: https://github.com/PavelBobro/Verto
