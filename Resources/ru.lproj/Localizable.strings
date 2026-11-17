@@ -8,6 +8,7 @@
 "footer.lowConfidence" = "Направление определено предположительно";
 "help.swap"            = "Развернуть направление (⌘S)";
 "help.settings"        = "Настройки (⌘,)";
+"input.label"          = "Текст для перевода";
 
 /* Settings */
 "settings.title"               = "Настройки Verto";

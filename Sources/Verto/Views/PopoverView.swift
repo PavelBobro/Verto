@@ -89,6 +89,7 @@ struct PopoverView: View {
                 .padding(.vertical, 8)
                 .frame(minHeight: 76, maxHeight: .infinity)
                 .focused($inputFocused)
+                .accessibilityLabel(Text(verbatim: L.inputLabel))
 
                 // Only while there is something to clear — a permanent × in an empty
                 // field is just clutter.
@@ -104,6 +105,7 @@ struct PopoverView: View {
                     .buttonStyle(.plain)
                     .pointerStyle(.link)
                     .help(L.clearInput)
+                    .accessibilityLabel(Text(verbatim: L.clearInput))
                     .padding(.top, 8)
                     .padding(.trailing, 9)
                 }
@@ -204,6 +206,8 @@ struct PopoverView: View {
             .buttonStyle(.plain)
             .pointerStyle(.link)
             .help(L.swapHelp)
+            .accessibilityLabel(Text(verbatim: "\(model.source.badge) → \(model.target.badge)"))
+            .accessibilityHint(L.swapHelp)
 
             Spacer()
 
@@ -217,6 +221,7 @@ struct PopoverView: View {
             .buttonStyle(.plain)
             .pointerStyle(.link)
             .help(L.captureHelp)
+            .accessibilityLabel(Text(verbatim: L.captureHelp))
 
             Button { model.showingHistory.toggle() } label: {
                 Image(systemName: model.showingHistory ? "clock.fill" : "clock")
@@ -228,6 +233,7 @@ struct PopoverView: View {
             .buttonStyle(.plain)
             .pointerStyle(.link)
             .help(L.historyHelp)
+            .accessibilityLabel(Text(verbatim: L.historyHelp))
 
             Button(action: onOpenSettings) {
                 Image(systemName: "gearshape")
@@ -239,6 +245,7 @@ struct PopoverView: View {
             .buttonStyle(.plain)
             .pointerStyle(.link)
             .help(L.settingsHelp)
+            .accessibilityLabel(Text(verbatim: L.settingsHelp))
             }
         }
         .padding(.horizontal, 12)

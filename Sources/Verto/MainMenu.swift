@@ -2,6 +2,7 @@ import AppKit
 
 /// A menu bar app has no visible menu, but macOS still routes ⌘X/⌘C/⌘V/⌘A and ⌘Q
 /// through the main menu. Without one, pasting into a text field simply does nothing.
+@MainActor
 enum MainMenu {
 
     static func build(target: AnyObject) -> NSMenu {

@@ -5,17 +5,18 @@ import Foundation
 /// Keys live here instead of being scattered through the views so a missing or
 /// renamed one is a compile error rather than an English word appearing in a Russian
 /// interface. English is the base language; the app follows the system.
+@MainActor
 enum L {
 
     /// Which bundle strings come from. Pointing this at a single `.lproj` is what lets
     /// the interface change language on the spot: reading `AppleLanguages` instead
     /// would only take effect on the next launch.
-    nonisolated(unsafe) static var bundle: Bundle = .main
+    static var bundle: Bundle = .main
 
     /// The locale the interface is being read in. Anything the system localises for
     /// us — language names, dates — has to go through this, or it follows the Mac's
     /// language while the rest of the window follows the chosen one.
-    nonisolated(unsafe) static var locale: Locale = .current
+    static var locale: Locale = .current
 
     static func use(_ language: AppLanguage) {
         switch language {
@@ -48,6 +49,7 @@ enum L {
     static var swapHelp: String          { t("help.swap") }
     static var settingsHelp: String      { t("help.settings") }
     static var clearInput: String        { t("help.clearInput") }
+    static var inputLabel: String        { t("input.label") }
 
     // Screen capture
     static var captureHelp: String       { t("capture.help") }
@@ -118,6 +120,7 @@ enum AppLanguage: String, CaseIterable, Codable, Sendable {
     case russian = "ru"
 
     /// Named in its own language, the way macOS lists languages.
+    @MainActor
     var title: String {
         switch self {
         case .system:  L.languageSystem

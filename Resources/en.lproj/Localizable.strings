@@ -8,6 +8,7 @@
 "footer.lowConfidence" = "Direction is a guess";
 "help.swap"            = "Flip the direction (⌘S)";
 "help.settings"        = "Settings (⌘,)";
+"input.label"          = "Text to translate";
 
 /* Settings */
 "settings.title"               = "Verto Settings";

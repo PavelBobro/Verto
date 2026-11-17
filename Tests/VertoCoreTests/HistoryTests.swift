@@ -128,4 +128,16 @@ struct HistoryPersistenceTests {
         #expect(restored == history)
         #expect(restored.records.first?.source == .english)
     }
+
+    @Test("Архив истории хранит версию формата")
+    func archiveCarriesVersion() throws {
+        var history = History()
+        history.add(record("привет", "hello"))
+
+        let data = try JSONEncoder().encode(HistoryArchive(history: history))
+        let restored = try JSONDecoder().decode(HistoryArchive.self, from: data)
+
+        #expect(restored.version == HistoryArchive.currentVersion)
+        #expect(restored.history == history)
+    }
 }

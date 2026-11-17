@@ -66,3 +66,18 @@ public struct History: Codable, Equatable, Sendable {
         records.removeAll()
     }
 }
+
+/// The on-disk shape of the history. The version is separate from `History` so a
+/// future schema can migrate deliberately instead of failing to decode and silently
+/// presenting an empty list.
+public struct HistoryArchive: Codable, Equatable, Sendable {
+    public static let currentVersion = 1
+
+    public let version: Int
+    public let history: History
+
+    public init(history: History, version: Int = Self.currentVersion) {
+        self.version = version
+        self.history = history
+    }
+}

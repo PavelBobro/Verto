@@ -75,7 +75,10 @@ test: strings
 zip:
 	$(MAKE) app IDENTITY=
 	rm -f $(APP)-$(VERSION).zip
-	ditto -c -k --keepParent $(BUNDLE) $(APP)-$(VERSION).zip
+	ditto -c -k --keepParent --norsrc --noextattr $(BUNDLE) $(APP)-$(VERSION).zip
+	@if unzip -l $(APP)-$(VERSION).zip | grep -q '/\._'; then \
+		echo "release zip contains AppleDouble files"; exit 1; \
+	fi
 	@echo "$(APP)-$(VERSION).zip — $$(du -h $(APP)-$(VERSION).zip | cut -f1)"
 
 ## What goes on a release page. Only the zip while Verto is unsigned: a quarantined
@@ -133,6 +136,11 @@ install: app
 	@sleep 1
 	rm -rf /Applications/$(APP).app
 	cp -R $(BUNDLE) /Applications/$(APP).app
+	@test "$$(/usr/libexec/PlistBuddy -c 'Print :CFBundleShortVersionString' /Applications/$(APP).app/Contents/Info.plist)" = "$(VERSION)" \
+		|| { echo "installed bundle has the wrong version"; exit 1; }
+	@cmp -s "$(CONTENTS)/MacOS/$(APP)" "/Applications/$(APP).app/Contents/MacOS/$(APP)" \
+		|| { echo "installed binary differs from the build"; exit 1; }
+	codesign --verify --verbose=2 /Applications/$(APP).app
 	open /Applications/$(APP).app
 	@echo "installed and running from /Applications"
 
