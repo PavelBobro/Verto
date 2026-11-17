@@ -110,6 +110,11 @@ everyone.
 *damaged*, which reads as a corrupt download and sends people away. A quarantined zip
 extracts, and the warning arrives at launch where it can be answered.
 
+**A DMG only when a catalog requires one** (2026-11-17). The appstorrent submission
+needs a `.dmg` link, so `make dmg` produces an ad-hoc image as an optional asset. The zip
+remains the recommended download for an unsigned build: the DMG can still be refused by
+Gatekeeper when quarantined.
+
 **Local builds use a self-signed identity, releases do not.** See `AGENTS.md`.
 
 ## Tooling
