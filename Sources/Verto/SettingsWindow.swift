@@ -29,6 +29,9 @@ final class SettingsWindow: NSObject, NSWindowDelegate {
     }
 
     func show() {
+        // The status-item menu can change the login item while this window is closed.
+        Settings.shared.refreshLaunchAtLogin()
+
         if window == nil {
             let hosting = NSHostingController(rootView: SettingsView())
             let window = NSWindow(contentViewController: hosting)

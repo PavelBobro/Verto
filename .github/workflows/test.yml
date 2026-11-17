@@ -1,0 +1,25 @@
+name: test
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build-and-test:
+    # The package platform is macOS 26; an older runner cannot build it.
+    runs-on: macos-26
+    steps:
+      - uses: actions/checkout@v4
+
+      # Use the runner's full Xcode toolchain here: GitHub's image may not ship the
+      # swift-testing plugin inside Command Line Tools, while the Makefile can point
+      # at whichever developer directory is selected.
+      - name: Test
+        run: make test DEVELOPER_DIR="$(xcode-select -p)"
+
+      - name: Build universal bundle
+        run: make app DEVELOPER_DIR="$(xcode-select -p)"
+
+      - name: Verify bundle
+        run: make check DEVELOPER_DIR="$(xcode-select -p)"

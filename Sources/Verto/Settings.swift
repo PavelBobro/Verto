@@ -18,10 +18,15 @@ final class Settings: ObservableObject {
 
     @Published var launchAtLogin: Bool {
         didSet {
+            guard !isRefreshingLoginItem else { return }
             guard launchAtLogin != oldValue else { return }
             if case .failure(let error) = LoginItem.set(launchAtLogin) {
                 lastError = error.localizedDescription
+                // Reflect what the system actually has, without recursing through this
+                // observer or trying to change the login item a second time.
+                isRefreshingLoginItem = true
                 launchAtLogin = LoginItem.isEnabled
+                isRefreshingLoginItem = false
             } else {
                 lastError = nil
             }
@@ -61,6 +66,10 @@ final class Settings: ObservableObject {
     /// ad-hoc signed build, and silence would look like the toggle is broken.
     @Published var lastError: String?
 
+    /// Set while `launchAtLogin` is being brought in line with the system, so the
+    /// property observer does not call `SMAppService` again.
+    private var isRefreshingLoginItem = false
+
     private enum Key: String {
         case pair = "languagePair"
         case hotKey = "hotKey"
@@ -75,6 +84,16 @@ final class Settings: ObservableObject {
         appLanguage = UserDefaults.standard.string(forKey: "appLanguage")
             .flatMap(AppLanguage.init(rawValue:)) ?? .system
         L.use(appLanguage)
+    }
+
+    /// Re-reads the login-item state after a change made outside this object — the
+    /// status-item menu or System Settings — without writing it back to the system.
+    func refreshLaunchAtLogin() {
+        let enabled = LoginItem.isEnabled
+        guard enabled != launchAtLogin else { return }
+        isRefreshingLoginItem = true
+        launchAtLogin = enabled
+        isRefreshingLoginItem = false
     }
 
     private static func load<T: Decodable>(_ type: T.Type, as key: Key) -> T? {

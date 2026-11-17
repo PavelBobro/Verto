@@ -1,6 +1,7 @@
 import AppKit
 import Combine
 import SwiftUI
+import VertoAppModel
 
 /// The whole app surface: an icon in the menu bar and a popover under it.
 /// No Dock icon, no main window — see `LSUIElement` in Info.plist.
@@ -10,7 +11,10 @@ final class MenuBarController: NSObject, NSPopoverDelegate {
     private let statusItem: NSStatusItem
     private let popover = NSPopover()
     private var hotKey: HotKey?
-    private let model = PopoverModel()
+    private lazy var model = PopoverModel(
+        pair: { Settings.shared.pair },
+        history: HistoryStore.shared
+    )
     private let settingsWindow = SettingsWindow()
     private var cancellables = Set<AnyCancellable>()
     /// A screenshot closes the popover as part of one continuous action. The normal
@@ -152,7 +156,11 @@ final class MenuBarController: NSObject, NSPopoverDelegate {
     }
 
     @objc func toggleLaunchAtLogin() {
-        if case .failure(let error) = LoginItem.set(!LoginItem.isEnabled) {
+        let result = LoginItem.set(!LoginItem.isEnabled)
+        // The Settings window may be open (or opened later) and must show the state
+        // the system actually has.
+        Settings.shared.refreshLaunchAtLogin()
+        if case .failure(let error) = result {
             let alert = NSAlert()
             alert.messageText = L.launchFailed
             alert.informativeText = error.localizedDescription

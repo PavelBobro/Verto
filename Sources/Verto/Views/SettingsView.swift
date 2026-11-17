@@ -28,14 +28,16 @@ struct SettingsView: View {
                     .foregroundStyle(settings.pair.isValid ? Color.secondary : Color.orange)
             }
 
-            Section {
-                packRow
-            } header: {
-                Text(L.packs)
-            } footer: {
-                Text(L.packsFooter)
-                    .font(.callout)
-                    .foregroundStyle(.secondary)
+            if settings.pair.isValid {
+                Section {
+                    packRow
+                } header: {
+                    Text(L.packs)
+                } footer: {
+                    Text(L.packsFooter)
+                        .font(.callout)
+                        .foregroundStyle(.secondary)
+                }
             }
 
             Section {
@@ -90,6 +92,8 @@ struct SettingsView: View {
             do {
                 try await session.prepareTranslation()
                 await packs.legFinished()
+            } catch is CancellationError {
+                await packs.legCancelled()
             } catch {
                 packs.legFailed(error)
             }

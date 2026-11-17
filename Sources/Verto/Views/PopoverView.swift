@@ -1,3 +1,4 @@
+import VertoAppModel
 import VertoCore
 import SwiftUI
 import Translation
@@ -48,10 +49,15 @@ struct PopoverView: View {
             do {
                 try await session.prepareTranslation()
                 TranslationService.log.info("prepareTranslation finished")
+                model.downloadFinished()
+            } catch is CancellationError {
+                // Dismissing the system sheet is a normal outcome; retrying now would
+                // put the same sheet straight back on screen.
+                model.downloadCancelled()
             } catch {
                 TranslationService.log.error("prepareTranslation failed: \(String(describing: error), privacy: .private)")
+                model.downloadFailed(error)
             }
-            model.downloadFinished()
         }
     }
 

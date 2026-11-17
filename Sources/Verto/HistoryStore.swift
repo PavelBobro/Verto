@@ -1,4 +1,5 @@
 import Foundation
+import VertoAppModel
 import VertoCore
 
 /// The history, saved so it survives a restart.
@@ -27,3 +28,5 @@ final class HistoryStore: ObservableObject {
         UserDefaults.standard.set(data, forKey: Self.key)
     }
 }
+
+extension HistoryStore: HistorySink {}

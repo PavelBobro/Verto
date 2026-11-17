@@ -56,8 +56,10 @@ strings:
 ## its macro plugin sits in plugins/testing/, which the build system does not search,
 ## so every @Test fails with "plugin for module 'TestingMacros' not found". The path
 ## is passed explicitly when that folder exists.
-TESTING_PLUGINS := $(DEVELOPER_DIR)/usr/lib/swift/host/plugins/testing
-TEST_FLAGS      := $(if $(wildcard $(TESTING_PLUGINS)),-Xswiftc -plugin-path -Xswiftc $(TESTING_PLUGINS))
+TESTING_PLUGINS := $(firstword $(wildcard \
+	$(DEVELOPER_DIR)/usr/lib/swift/host/plugins/testing \
+	$(DEVELOPER_DIR)/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing))
+TEST_FLAGS      := $(if $(TESTING_PLUGINS),-Xswiftc -plugin-path -Xswiftc $(TESTING_PLUGINS))
 
 test: strings
 	swift test $(TEST_FLAGS)

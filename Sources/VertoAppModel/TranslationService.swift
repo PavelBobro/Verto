@@ -3,15 +3,26 @@ import Foundation
 import os
 import Translation
 
+/// The part of the translation engine the popover model needs. Keeping it a protocol
+/// lets the model be exercised with a fake engine; the real one still owns sessions and
+/// cancellation.
+@MainActor
+public protocol TranslationEngine: AnyObject {
+    var state: TranslationService.State { get }
+    var onChange: ((TranslationService.State) -> Void)? { get set }
+    func translate(_ text: String, from source: LanguageCode, to target: LanguageCode)
+    func cancel()
+}
+
 /// Wraps `Translation.framework`.
 ///
 /// Uses the direct session API (macOS 26) rather than the SwiftUI `.translationTask`
 /// modifier, so translation is testable on its own and cancellation is the framework's
 /// own `cancel()` instead of a Task race (FR-2, Р-10).
 @MainActor
-final class TranslationService {
+public final class TranslationService: TranslationEngine {
 
-    enum State: Equatable {
+    public enum State: Equatable {
         case idle
         case translating
         case translated(String)
@@ -20,7 +31,7 @@ final class TranslationService {
         case failed(String)
     }
 
-    private(set) var state: State = .idle {
+    public private(set) var state: State = .idle {
         didSet {
             // Never log the associated values: `.translated` carries the user's text
             // and `.failed` the framework's message, and this process feeds unified
@@ -41,13 +52,15 @@ final class TranslationService {
         }
     }
 
-    static let log = Logger(subsystem: "app.verto.Verto", category: "translation")
+    public static let log = Logger(subsystem: "app.verto.Verto", category: "translation")
+
+    public init() {}
 
     /// Bumped on every request. A run only writes its result if it is still the
     /// latest one — otherwise a slow, superseded check can land after a newer one and
     /// put stale state on screen.
     private var generation = 0
-    var onChange: ((State) -> Void)?
+    public var onChange: ((State) -> Void)?
 
     /// Time to wait after the last keystroke. Long enough that typing does not fire
     /// a request per character, short enough to feel immediate on paste (FR-2).
@@ -58,7 +71,7 @@ final class TranslationService {
     private var sessionKey: String?
     private var inFlight = false
 
-    func translate(_ text: String, from source: LanguageCode, to target: LanguageCode) {
+    public func translate(_ text: String, from source: LanguageCode, to target: LanguageCode) {
         work?.cancel()
         // Only tear the session down when there is something to stop. `cancel()` is
         // terminal — a cancelled session refuses every later request — so calling it
@@ -80,7 +93,7 @@ final class TranslationService {
         }
     }
 
-    func cancel() {
+    public func cancel() {
         work?.cancel()
         invalidateSession()
         state = .idle

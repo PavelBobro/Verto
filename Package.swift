@@ -12,9 +12,17 @@ let package = Package(
             path: "Sources/VertoCore",
             swiftSettings: [.swiftLanguageMode(.v5)]
         ),
+        // The popover model and the translation wrapper, kept out of the executable
+        // so their rules can be exercised without launching the app.
+        .target(
+            name: "VertoAppModel",
+            dependencies: ["VertoCore"],
+            path: "Sources/VertoAppModel",
+            swiftSettings: [.swiftLanguageMode(.v5)]
+        ),
         .executableTarget(
             name: "Verto",
-            dependencies: ["VertoCore"],
+            dependencies: ["VertoCore", "VertoAppModel"],
             path: "Sources/Verto",
             swiftSettings: [.swiftLanguageMode(.v5)]
         ),
@@ -22,6 +30,12 @@ let package = Package(
             name: "VertoCoreTests",
             dependencies: ["VertoCore"],
             path: "Tests/VertoCoreTests",
+            swiftSettings: [.swiftLanguageMode(.v5)]
+        ),
+        .testTarget(
+            name: "VertoAppModelTests",
+            dependencies: ["VertoCore", "VertoAppModel"],
+            path: "Tests/VertoAppModelTests",
             swiftSettings: [.swiftLanguageMode(.v5)]
         )
     ]
