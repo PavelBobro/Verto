@@ -84,6 +84,7 @@ struct SettingsView: View {
         .formStyle(.grouped)
         .frame(width: 480)
         .fixedSize(horizontal: false, vertical: true)
+        .environment(\.locale, L.locale)
         .task(id: settings.pair) { await packs.refresh(for: settings.pair) }
         .translationTask(packs.pending) { session in
             do {

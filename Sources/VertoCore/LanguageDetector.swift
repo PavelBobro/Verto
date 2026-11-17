@@ -71,8 +71,8 @@ public enum LanguageDetector {
         recognizer.processString(text)
 
         let hypotheses = recognizer.languageHypotheses(withMaximum: 4)
-        let firstScore = hypotheses[NLLanguage(pair.first.rawValue)] ?? 0
-        let secondScore = hypotheses[NLLanguage(pair.second.rawValue)] ?? 0
+        let firstScore = score(for: pair.first, in: hypotheses)
+        let secondScore = score(for: pair.second, in: hypotheses)
 
         let isFirst = firstScore >= secondScore
         let winner = max(firstScore, secondScore)
@@ -81,5 +81,19 @@ public enum LanguageDetector {
         return isFirst
             ? Result(source: pair.first, target: pair.second, isConfident: confident)
             : Result(source: pair.second, target: pair.first, isConfident: confident)
+    }
+
+    /// `NLLanguageRecognizer` may split one language into region and script variants:
+    /// Chinese comes back as `zh-Hans` and `zh-Hant`, never as plain `zh`. Summing every
+    /// hypothesis whose identifier starts with the language code keeps the score for
+    /// the language the pair actually contains.
+    private static func score(for code: LanguageCode,
+                              in hypotheses: [NLLanguage: Double]) -> Double {
+        let base = code.rawValue
+        return hypotheses.reduce(0) { total, hypothesis in
+            let identifier = hypothesis.key.rawValue
+            guard identifier == base || identifier.hasPrefix("\(base)-") else { return total }
+            return total + hypothesis.value
+        }
     }
 }

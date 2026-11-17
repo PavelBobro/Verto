@@ -159,6 +159,20 @@ struct ScriptOverlapTests {
         #expect(source("Die Besprechung wurde auf Donnerstag verschoben", deEn) == .german)
         #expect(source("The meeting has been moved to Thursday", deEn) == .english)
     }
+
+    @Test("Китайский и японский различаются, хотя делят кандзи")
+    func chineseAgainstJapanese() {
+        // NLLanguageRecognizer names Chinese with a region tag ("zh-Hans",
+        // "zh-Hant"), so looking up plain "zh" scores it as zero and every
+        // Chinese phrase would be taken for Japanese.
+        let zhJa = LanguagePair(first: .chinese, second: .japanese)
+        #expect(source("你好世界", zhJa) == .chinese)
+        #expect(source("日本語", zhJa) == .japanese)
+
+        let jaZh = LanguagePair(first: .japanese, second: .chinese)
+        #expect(source("你好世界", jaZh) == .chinese)
+        #expect(source("日本語", jaZh) == .japanese)
+    }
 }
 
 // MARK: - Every shipped language must be classifiable

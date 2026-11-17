@@ -7,8 +7,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private var controller: MenuBarController?
 
     func applicationDidFinishLaunching(_ notification: Notification) {
-        NSApp.mainMenu = MainMenu.build()
-        controller = MenuBarController()
+        // The menu needs the controller as its target for ⌘,; build it after the
+        // controller exists, not before.
+        let controller = MenuBarController()
+        self.controller = controller
+        NSApp.mainMenu = MainMenu.build(target: controller)
     }
 }
 

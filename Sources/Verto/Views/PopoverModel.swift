@@ -39,11 +39,15 @@ final class PopoverModel: ObservableObject {
 
     private let service = TranslationService()
     private var manualOverride = false
+    /// The pair the direction was last derived from. Comparing the whole pair keeps a
+    /// change of either language from being mistaken for "nothing changed".
+    private var lastPair: LanguagePair
 
     init() {
         let pair = Settings.shared.pair
         source = pair.first
         target = pair.second
+        lastPair = pair
 
         service.onChange = { [weak self] state in
             guard let self else { return }
@@ -91,10 +95,12 @@ final class PopoverModel: ObservableObject {
     /// Picks up a pair changed in settings while the popover was closed.
     func syncPair() {
         let pair = Settings.shared.pair
-        guard source != pair.first && source != pair.second else { return }
+        guard pair != lastPair else { return }
+        lastPair = pair
         source = pair.first
         target = pair.second
         manualOverride = false
+        isConfident = true
         if !input.isEmpty { inputChanged(input) }
     }
 

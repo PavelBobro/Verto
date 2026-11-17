@@ -13,6 +13,10 @@ final class MenuBarController: NSObject, NSPopoverDelegate {
     private let model = PopoverModel()
     private let settingsWindow = SettingsWindow()
     private var cancellables = Set<AnyCancellable>()
+    /// A screenshot closes the popover as part of one continuous action. The normal
+    /// close path archives the translation and clears the model; that is wrong here,
+    /// especially when the user cancels the capture and expects the window back.
+    private var suppressArchiveOnNextClose = false
 
     override init() {
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
@@ -59,9 +63,10 @@ final class MenuBarController: NSObject, NSPopoverDelegate {
         // SwiftUI views redraw on their own.
         Settings.shared.$appLanguage
             .dropFirst()
-            .sink { language in
+            .sink { [weak self] language in
                 L.use(language)
-                NSApp.mainMenu = MainMenu.build()
+                guard let self else { return }
+                NSApp.mainMenu = MainMenu.build(target: self)
             }
             .store(in: &cancellables)
     }
@@ -101,6 +106,10 @@ final class MenuBarController: NSObject, NSPopoverDelegate {
 
     /// Fires however the popover closes — esc, the shortcut, or a click elsewhere.
     func popoverDidClose(_ notification: Notification) {
+        if suppressArchiveOnNextClose {
+            suppressArchiveOnNextClose = false
+            return
+        }
         model.archiveAndReset()
     }
 
@@ -113,7 +122,10 @@ final class MenuBarController: NSObject, NSPopoverDelegate {
     /// current translation on the way out, because this is one continuous action.
     @objc func captureScreen() {
         let wasShown = popover.isShown
-        if wasShown { popover.performClose(nil) }
+        if wasShown {
+            suppressArchiveOnNextClose = true
+            popover.performClose(nil)
+        }
 
         Task { @MainActor in
             guard let image = await ScreenCapture.selectRegion() else {

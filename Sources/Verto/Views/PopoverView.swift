@@ -36,6 +36,9 @@ struct PopoverView: View {
         }
         .frame(width: 360)
         .frame(minHeight: 300, maxHeight: 520, alignment: .top)
+        // The chosen interface language is not only our own strings: dates, numbers and
+        // other system-formatted text inside the popover have to follow it too.
+        .environment(\.locale, L.locale)
         .background(shortcuts)
         .onAppear {
             inputFocused = true
@@ -46,7 +49,7 @@ struct PopoverView: View {
                 try await session.prepareTranslation()
                 TranslationService.log.info("prepareTranslation finished")
             } catch {
-                TranslationService.log.error("prepareTranslation failed: \(String(describing: error), privacy: .public)")
+                TranslationService.log.error("prepareTranslation failed: \(String(describing: error), privacy: .private)")
             }
             model.downloadFinished()
         }
@@ -152,8 +155,11 @@ struct PopoverView: View {
         guard let text = model.translatedText else { return }
         NSPasteboard.general.clearContents()
         NSPasteboard.general.setString(text, forType: .string)
-        // The transaction is finished; leaving the old text would make the next
-        // paste land in a field that already has content.
+        // Archive before clearing: close archives only a finished translation, and a
+        // reset here would make the popover look idle by the time it closes. The
+        // copy-and-close path is the main way a translation leaves the window, so
+        // skipping history here would quietly empty the feature.
+        model.archive()
         model.reset()
         onClose()
     }

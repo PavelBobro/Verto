@@ -4,23 +4,34 @@ import AppKit
 /// through the main menu. Without one, pasting into a text field simply does nothing.
 enum MainMenu {
 
-    static func build() -> NSMenu {
+    static func build(target: AnyObject) -> NSMenu {
         let root = NSMenu()
-        root.addItem(appMenu())
+        root.addItem(appMenu(target: target))
         root.addItem(editMenu())
         return root
     }
 
-    private static func appMenu() -> NSMenuItem {
-        let item = NSMenuItem()
+    private static func appMenu(target: AnyObject) -> NSMenuItem {
+        // The first item is the application menu; AppKit draws its title in the menu
+        // bar while the settings window makes Verto a regular app.
+        let item = NSMenuItem(title: appName, action: nil, keyEquivalent: "")
         let menu = NSMenu()
-        menu.addItem(withTitle: L.menuSettings, action: #selector(MenuBarController.openSettings), keyEquivalent: ",")
+        let settings = menu.addItem(withTitle: L.menuSettings, action: #selector(MenuBarController.openSettings), keyEquivalent: ",")
+        // Without a target the action goes down the responder chain, where the
+        // controller does not live. The status-item menu sets this explicitly; the
+        // main menu has to do the same or ⌘, silently does nothing.
+        settings.target = target
         menu.addItem(.separator())
         menu.addItem(withTitle: L.menuHide, action: #selector(NSApplication.hide(_:)), keyEquivalent: "h")
         menu.addItem(.separator())
         menu.addItem(withTitle: L.menuQuit, action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q")
         item.submenu = menu
         return item
+    }
+
+    private static var appName: String {
+        Bundle.main.object(forInfoDictionaryKey: "CFBundleName") as? String
+            ?? ProcessInfo.processInfo.processName
     }
 
     private static func editMenu() -> NSMenuItem {

@@ -22,8 +22,22 @@ final class TranslationService {
 
     private(set) var state: State = .idle {
         didSet {
-            Self.log.debug("state → \(String(describing: self.state), privacy: .public)")
+            // Never log the associated values: `.translated` carries the user's text
+            // and `.failed` the framework's message, and this process feeds unified
+            // logging. The state name is enough to follow the machine.
+            Self.log.debug("state → \(Self.logName(for: self.state), privacy: .public)")
             onChange?(state)
+        }
+    }
+
+    private static func logName(for state: State) -> String {
+        switch state {
+        case .idle:          "idle"
+        case .translating:   "translating"
+        case .translated:    "translated"
+        case .needsDownload: "needsDownload"
+        case .unsupported:   "unsupported"
+        case .failed:        "failed"
         }
     }
 
@@ -85,6 +99,7 @@ final class TranslationService {
 
     private func run(_ text: String, from source: LanguageCode, to target: LanguageCode,
                      generation current: Int) async {
+        guard current == generation, !Task.isCancelled else { return }
         state = .translating
 
         let status = await LanguageAvailability().status(from: source.language, to: target.language)
@@ -116,9 +131,12 @@ final class TranslationService {
         } catch is CancellationError {
             // Superseded by newer input — leave the previous result on screen.
         } catch {
-            // A failed session cannot be trusted for the next request either.
+            // A superseded run must not write state or invalidate the session that a
+            // newer run may already be using. The session is terminal after a real
+            // failure, so only the latest generation is allowed to discard it.
+            guard current == generation, !Task.isCancelled else { return }
             invalidateSession()
-            NSLog("Verto: translate \(source.rawValue)>\(target.rawValue) failed — \(error)")
+            Self.log.error("translate \(source.rawValue, privacy: .public)>\(target.rawValue, privacy: .public) failed — \(error.localizedDescription, privacy: .private)")
             state = .failed(error.localizedDescription)
         }
     }
